@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.jennymakki.projectmanager.DemoApplicationTests" time="1.033" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.jennymakki.projectmanager.auth.AuthControllerTest" time="10.419" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -49,7 +49,7 @@
     <property name="localRepository" value="/Users/themakkis/.m2/repository"/>
     <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
     <property name="java.io.tmpdir" value="/var/folders/t2/n_knnyg573sd54sr6vjp3_th0000gn/T/"/>
-    <property name="com.zaxxer.hikari.pool_number" value="2"/>
+    <property name="com.zaxxer.hikari.pool_number" value="1"/>
     <property name="java.version" value="25.0.3"/>
     <property name="user.dir" value="/Users/themakkis/project-manager-system/backend"/>
     <property name="os.arch" value="x86_64"/>
@@ -68,9 +68,9 @@
     <property name="java.class.version" value="69.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[demo] "/>
   </properties>
-  <testcase name="contextLoads" classname="com.jennymakki.projectmanager.DemoApplicationTests" time="0.014">
-    <system-out><![CDATA[2026-05-22T20:55:31.554+02:00  INFO 10121 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.jennymakki.projectmanager.DemoApplicationTests]: DemoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-05-22T20:55:31.569+02:00  INFO 10121 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.jennymakki.projectmanager.ProjectManagerApplication for test class com.jennymakki.projectmanager.DemoApplicationTests
+  <testcase name="shouldRegisterUser" classname="com.jennymakki.projectmanager.auth.AuthControllerTest" time="1.761">
+    <system-out><![CDATA[20:55:20.607 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.jennymakki.projectmanager.auth.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:55:20.850 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.jennymakki.projectmanager.ProjectManagerApplication for test class com.jennymakki.projectmanager.auth.AuthControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -81,36 +81,53 @@
 
  :: Spring Boot ::                (v3.5.0)
 
-2026-05-22T20:55:31.654+02:00  INFO 10121 --- [demo] [           main] c.j.projectmanager.DemoApplicationTests  : Starting DemoApplicationTests using Java 25.0.3 with PID 10121 (started by themakkis in /Users/themakkis/project-manager-system/backend)
-2026-05-22T20:55:31.654+02:00  INFO 10121 --- [demo] [           main] c.j.projectmanager.DemoApplicationTests  : No active profile set, falling back to 1 default profile: "default"
-2026-05-22T20:55:31.950+02:00  INFO 10121 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-22T20:55:31.967+02:00  INFO 10121 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 1 JPA repository interface.
-2026-05-22T20:55:32.142+02:00  INFO 10121 --- [demo] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-22T20:55:32.146+02:00  INFO 10121 --- [demo] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-05-22T20:55:32.163+02:00  INFO 10121 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-22T20:55:32.164+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2026-05-22T20:55:32.166+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn15: url=jdbc:h2:mem:testdb user=SA
-2026-05-22T20:55:32.166+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2026-05-22T20:55:32.168+02:00  INFO 10121 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+2026-05-22T20:55:21.966+02:00  INFO 10121 --- [demo] [           main] c.j.p.auth.AuthControllerTest            : Starting AuthControllerTest using Java 25.0.3 with PID 10121 (started by themakkis in /Users/themakkis/project-manager-system/backend)
+2026-05-22T20:55:21.968+02:00  INFO 10121 --- [demo] [           main] c.j.p.auth.AuthControllerTest            : No active profile set, falling back to 1 default profile: "default"
+2026-05-22T20:55:23.390+02:00  INFO 10121 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-22T20:55:23.509+02:00  INFO 10121 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 1 JPA repository interface.
+2026-05-22T20:55:24.563+02:00  INFO 10121 --- [demo] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-22T20:55:24.666+02:00  INFO 10121 --- [demo] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-05-22T20:55:24.743+02:00  INFO 10121 --- [demo] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-22T20:55:25.328+02:00  INFO 10121 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-22T20:55:25.380+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-22T20:55:25.718+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-05-22T20:55:25.721+02:00  INFO 10121 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-22T20:55:25.838+02:00  INFO 10121 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 2.3.232
 	Autocommit mode: undefined/unknown
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-05-22T20:55:32.223+02:00  INFO 10121 --- [demo] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-22T20:55:32.228+02:00  INFO 10121 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-22T20:55:32.288+02:00  WARN 10121 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-22T20:55:32.309+02:00  WARN 10121 --- [demo] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+2026-05-22T20:55:27.026+02:00  INFO 10121 --- [demo] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: create table users (id bigint generated by default as identity, email varchar(255) not null, password varchar(255) not null, primary key (id))
+Hibernate: alter table if exists users drop constraint if exists UK6dotkott2kjsp8vw4d0m25fb7
+Hibernate: alter table if exists users add constraint UK6dotkott2kjsp8vw4d0m25fb7 unique (email)
+2026-05-22T20:55:27.118+02:00  INFO 10121 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-22T20:55:27.687+02:00  WARN 10121 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-22T20:55:27.751+02:00  WARN 10121 --- [demo] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 5b723338-e31b-4dd1-8309-da950fdf1ae9
+Using generated security password: e3437fc6-aeda-41a2-bad2-34a6fc837235
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-05-22T20:55:32.311+02:00  INFO 10121 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-05-22T20:55:32.521+02:00  INFO 10121 --- [demo] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2026-05-22T20:55:32.567+02:00  INFO 10121 --- [demo] [           main] c.j.projectmanager.DemoApplicationTests  : Started DemoApplicationTests in 0.983 seconds (process running for 13.504)
+2026-05-22T20:55:27.769+02:00  INFO 10121 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-22T20:55:28.691+02:00  INFO 10121 --- [demo] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-22T20:55:28.878+02:00  INFO 10121 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-05-22T20:55:28.879+02:00  INFO 10121 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-05-22T20:55:28.881+02:00  INFO 10121 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-05-22T20:55:28.933+02:00  INFO 10121 --- [demo] [           main] c.j.p.auth.AuthControllerTest            : Started AuthControllerTest in 7.792 seconds (process running for 9.87)
+Hibernate: select u1_0.id,u1_0.email,u1_0.password from users u1_0
+Hibernate: select u1_0.id,u1_0.email,u1_0.password from users u1_0 where u1_0.email=?
+Hibernate: insert into users (email,password,id) values (?,?,default)
+Hibernate: select u1_0.id,u1_0.email,u1_0.password from users u1_0 where u1_0.email=?
 ]]></system-out>
+    <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/Users/themakkis/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.5/byte-buddy-agent-1.17.5.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
   </testcase>
 </testsuite>

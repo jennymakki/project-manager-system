@@ -1,2 +1,3 @@
 /Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/DemoApplicationTests.java
+/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/auth/AuthControllerTest.java
 /Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/user/UserRepositoryTest.java
