@@ -1,1 +1,3 @@
-/Users/themakkis/project-manager-system/backend/src/main/java/com/example/demo/DemoApplication.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/ProjectManagerApplication.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/user/User.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/user/UserRepository.java
