@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jennymakki.projectmanager.auth.dto.AuthResponse;
+import com.jennymakki.projectmanager.auth.dto.LoginRequest;
 import com.jennymakki.projectmanager.auth.dto.RegisterRequest;
 import com.jennymakki.projectmanager.auth.service.AuthService;
 
@@ -28,5 +29,17 @@ public class AuthController {
         return ResponseEntity
                 .status(201)
                 .body(new AuthResponse("User created"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(
+            @RequestBody LoginRequest request) {
+
+        String token = authService.login(
+                request.email,
+                request.password);
+
+        return ResponseEntity.ok(
+                new AuthResponse(token));
     }
 }

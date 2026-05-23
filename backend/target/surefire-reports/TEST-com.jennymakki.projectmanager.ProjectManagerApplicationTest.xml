@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.jennymakki.projectmanager.user.UserRepositoryTest" time="0.901" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.jennymakki.projectmanager.ProjectManagerApplicationTest" time="1.367" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -49,7 +49,7 @@
     <property name="localRepository" value="/Users/themakkis/.m2/repository"/>
     <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
     <property name="java.io.tmpdir" value="/var/folders/t2/n_knnyg573sd54sr6vjp3_th0000gn/T/"/>
-    <property name="com.zaxxer.hikari.pool_number" value="1"/>
+    <property name="com.zaxxer.hikari.pool_number" value="2"/>
     <property name="java.version" value="25.0.3"/>
     <property name="user.dir" value="/Users/themakkis/project-manager-system/backend"/>
     <property name="os.arch" value="x86_64"/>
@@ -68,9 +68,9 @@
     <property name="java.class.version" value="69.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[demo] "/>
   </properties>
-  <testcase name="shouldNotAllowDuplicateEmails" classname="com.jennymakki.projectmanager.user.UserRepositoryTest" time="0.077">
-    <system-out><![CDATA[2026-05-23T10:28:22.060+02:00  INFO 14759 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.jennymakki.projectmanager.user.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-05-23T10:28:22.197+02:00  INFO 14759 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.jennymakki.projectmanager.ProjectManagerApplication for test class com.jennymakki.projectmanager.user.UserRepositoryTest
+  <testcase name="contextLoads" classname="com.jennymakki.projectmanager.ProjectManagerApplicationTest" time="0.045">
+    <system-out><![CDATA[2026-05-23T10:28:22.957+02:00  INFO 14759 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.jennymakki.projectmanager.ProjectManagerApplicationTest]: ProjectManagerApplicationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-23T10:28:23.000+02:00  INFO 14759 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.jennymakki.projectmanager.ProjectManagerApplication for test class com.jennymakki.projectmanager.ProjectManagerApplicationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -81,38 +81,36 @@
 
  :: Spring Boot ::                (v3.5.0)
 
-2026-05-23T10:28:22.267+02:00  INFO 14759 --- [demo] [           main] c.j.p.user.UserRepositoryTest            : Starting UserRepositoryTest using Java 25.0.3 with PID 14759 (started by themakkis in /Users/themakkis/project-manager-system/backend)
-2026-05-23T10:28:22.268+02:00  INFO 14759 --- [demo] [           main] c.j.p.user.UserRepositoryTest            : No active profile set, falling back to 1 default profile: "default"
-2026-05-23T10:28:22.517+02:00  INFO 14759 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-23T10:28:22.545+02:00  INFO 14759 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 1 JPA repository interface.
-2026-05-23T10:28:22.577+02:00  INFO 14759 --- [demo] [           main] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
-2026-05-23T10:28:22.631+02:00  INFO 14759 --- [demo] [           main] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:6a75ad57-149d-4042-b0a3-8cf0090ed033;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-2026-05-23T10:28:22.670+02:00  INFO 14759 --- [demo] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-23T10:28:22.674+02:00  INFO 14759 --- [demo] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-05-23T10:28:22.701+02:00  INFO 14759 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-23T10:28:22.705+02:00  INFO 14759 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [Connecting through datasource 'org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory$EmbeddedDataSourceProxy@211ffbd0']
+2026-05-23T10:28:23.076+02:00  INFO 14759 --- [demo] [           main] c.j.p.ProjectManagerApplicationTest      : Starting ProjectManagerApplicationTest using Java 25.0.3 with PID 14759 (started by themakkis in /Users/themakkis/project-manager-system/backend)
+2026-05-23T10:28:23.077+02:00  INFO 14759 --- [demo] [           main] c.j.p.ProjectManagerApplicationTest      : No active profile set, falling back to 1 default profile: "default"
+2026-05-23T10:28:23.420+02:00  INFO 14759 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-23T10:28:23.443+02:00  INFO 14759 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2026-05-23T10:28:23.663+02:00  INFO 14759 --- [demo] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-23T10:28:23.666+02:00  INFO 14759 --- [demo] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-23T10:28:23.681+02:00  INFO 14759 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-23T10:28:23.682+02:00  INFO 14759 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-05-23T10:28:23.684+02:00  INFO 14759 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn15: url=jdbc:h2:mem:testdb user=SA
+2026-05-23T10:28:23.685+02:00  INFO 14759 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-05-23T10:28:23.686+02:00  INFO 14759 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
 	Database driver: undefined/unknown
 	Database version: 2.3.232
 	Autocommit mode: undefined/unknown
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-05-23T10:28:22.746+02:00  INFO 14759 --- [demo] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-Hibernate: create table users (id bigint generated by default as identity, email varchar(255) not null, password varchar(255) not null, primary key (id))
-Hibernate: alter table if exists users drop constraint if exists UK6dotkott2kjsp8vw4d0m25fb7
-Hibernate: alter table if exists users add constraint UK6dotkott2kjsp8vw4d0m25fb7 unique (email)
-2026-05-23T10:28:22.753+02:00  INFO 14759 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-23T10:28:22.829+02:00  INFO 14759 --- [demo] [           main] c.j.p.user.UserRepositoryTest            : Started UserRepositoryTest in 0.625 seconds (process running for 16.916)
-Hibernate: insert into users (email,password,id) values (?,?,default)
-Hibernate: insert into users (email,password,id) values (?,?,default)
-2026-05-23T10:28:22.880+02:00  WARN 14759 --- [demo] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 23505, SQLState: 23505
-2026-05-23T10:28:22.880+02:00 ERROR 14759 --- [demo] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : Unique index or primary key violation: "PUBLIC.UK6DOTKOTT2KJSP8VW4D0M25FB7_INDEX_4 ON PUBLIC.USERS(EMAIL NULLS FIRST) VALUES ( /* 1 */ 'duplicate@test.com' )"; SQL statement:
-insert into users (email,password,id) values (?,?,default) [23505-232]
-]]></system-out>
-  </testcase>
-  <testcase name="shouldSaveUser" classname="com.jennymakki.projectmanager.user.UserRepositoryTest" time="0.035">
-    <system-out><![CDATA[Hibernate: insert into users (email,password,id) values (?,?,default)
+2026-05-23T10:28:23.766+02:00  INFO 14759 --- [demo] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-23T10:28:23.775+02:00  INFO 14759 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-23T10:28:23.882+02:00  WARN 14759 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-23T10:28:23.910+02:00  WARN 14759 --- [demo] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3797790c-88b9-4336-b837-8400b7bf99fd
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-23T10:28:23.913+02:00  INFO 14759 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-23T10:28:24.160+02:00  INFO 14759 --- [demo] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-05-23T10:28:24.264+02:00  INFO 14759 --- [demo] [           main] c.j.p.ProjectManagerApplicationTest      : Started ProjectManagerApplicationTest in 1.253 seconds (process running for 18.351)
 ]]></system-out>
   </testcase>
 </testsuite>
