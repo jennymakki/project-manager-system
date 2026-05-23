@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
     @GetMapping("/boards")
-    public String boards() {
-        return "YOU MADE IT TO BOARDS!";
+    public String test() {
+        return "ok";
     }
 }

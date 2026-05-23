@@ -1,2 +1,2 @@
 GET http://localhost:8080/boards
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwidXNlcklkIjoxLCJpYXQiOjE3Nzk1NDkwMDksImV4cCI6MTc3OTU1MjYwOX0.MH9gMRueviPEzRLlATOUPfofS747Xelk8NLRNTEz4RE
