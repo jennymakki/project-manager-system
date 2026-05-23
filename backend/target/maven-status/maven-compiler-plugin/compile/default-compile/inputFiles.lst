@@ -4,7 +4,9 @@
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/auth/dto/LoginRequest.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/auth/dto/RegisterRequest.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/auth/service/AuthService.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/board/Board.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/board/BoardController.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/board/BoardRepository.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/config/SecurityConfig.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/exception/GlobalExceptionHandler.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/security/JwtFilter.java
