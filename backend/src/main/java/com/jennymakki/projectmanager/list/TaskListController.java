@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,41 +22,58 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @RequestMapping("/boards/{boardId}/lists")
 public class TaskListController {
 
-    private final TaskListService taskListService;
-    private final UserRepository userRepository;
+        private final TaskListService taskListService;
+        private final UserRepository userRepository;
 
-    public TaskListController(TaskListService taskListService,
-            UserRepository userRepository) {
-        this.taskListService = taskListService;
-        this.userRepository = userRepository;
-    }
+        public TaskListController(TaskListService taskListService,
+                        UserRepository userRepository) {
+                this.taskListService = taskListService;
+                this.userRepository = userRepository;
+        }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TaskListDto create(
-            @PathVariable Long boardId,
-            @RequestBody CreateTaskListRequest request,
-            Authentication auth) {
+        @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
+        public TaskListDto create(
+                        @PathVariable Long boardId,
+                        @RequestBody CreateTaskListRequest request,
+                        Authentication auth) {
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow();
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow();
 
-        TaskList list = taskListService.createList(boardId, request.getName(), user);
+                TaskList list = taskListService.createList(boardId, request.getName(), user);
 
-        return TaskListDto.from(list);
-    }
+                return TaskListDto.from(list);
+        }
 
-    @GetMapping
-    public List<TaskListDto> getAll(
-            @PathVariable Long boardId,
-            Authentication auth) {
+        @GetMapping
+        public List<TaskListDto> getAll(
+                        @PathVariable Long boardId,
+                        Authentication auth) {
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow();
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow();
 
-        return taskListService.getLists(boardId, user)
-                .stream()
-                .map(TaskListDto::from)
-                .toList();
-    }
+                return taskListService.getLists(boardId, user)
+                                .stream()
+                                .map(TaskListDto::from)
+                                .toList();
+        }
+
+        @PutMapping("/{id}")
+        public TaskListDto updateList(
+                        @PathVariable Long id,
+                        @RequestBody CreateTaskListRequest request,
+                        Authentication authentication) {
+
+                User user = userRepository.findByEmail(authentication.getName())
+                                .orElseThrow();
+
+                TaskList updated = taskListService.updateList(
+                                id,
+                                request.getName(),
+                                user);
+
+                return TaskListDto.from(updated);
+        }
 }

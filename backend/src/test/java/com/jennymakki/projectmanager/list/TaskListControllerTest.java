@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,6 +104,75 @@ class TaskListControllerTest {
     void shouldReturnUnauthorized_whenNoAuth() throws Exception {
 
         mockMvc.perform(get("/boards/1/lists"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "alice@test.com")
+    void shouldUpdateTaskList_whenBoardOwner() throws Exception {
+
+        User user = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        Board board = boardRepository.save(
+                new Board("Board", user));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("Old Name", board));
+
+        String body = """
+                    {
+                        "name": "Updated Name"
+                    }
+                """;
+
+        mockMvc.perform(put("/boards/" + board.getId() + "/lists/" + list.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Name"));
+    }
+
+    @Test
+    @WithMockUser(username = "bob@test.com")
+    void shouldReturnForbidden_whenNotBoardOwnerUpdatingList() throws Exception {
+
+        User owner = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        User other = userRepository.save(
+                new User("bob@test.com", "password"));
+
+        Board board = boardRepository.save(
+                new Board("Board", owner));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("Secret List", board));
+
+        String body = """
+                    {
+                        "name": "Hacked"
+                    }
+                """;
+
+        mockMvc.perform(put("/boards/" + board.getId() + "/lists/" + list.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnUnauthorized_whenNoAuthUpdatingList() throws Exception {
+
+        String body = """
+                    {
+                        "name": "Updated"
+                    }
+                """;
+
+        mockMvc.perform(put("/boards/1/lists/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
                 .andExpect(status().isUnauthorized());
     }
 }

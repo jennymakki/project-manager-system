@@ -45,4 +45,20 @@ public class TaskListService {
 
         return taskListRepository.findByBoardId(boardId);
     }
+
+    public TaskList updateList(Long listId, String name, User user) {
+
+        TaskList list = taskListRepository.findById(listId)
+                .orElseThrow();
+
+        Board board = list.getBoard();
+
+        if (!board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner");
+        }
+
+        list.setName(name);
+
+        return taskListRepository.save(list);
+    }
 }
