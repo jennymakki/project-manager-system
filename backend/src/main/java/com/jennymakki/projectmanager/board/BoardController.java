@@ -21,85 +21,87 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @RestController
 public class BoardController {
 
-    private final BoardService boardService;
-    private final UserRepository userRepository;
+        private final BoardService boardService;
+        private final UserRepository userRepository;
 
-    public BoardController(BoardService boardService,
-            UserRepository userRepository) {
-        this.boardService = boardService;
-        this.userRepository = userRepository;
-    }
+        public BoardController(BoardService boardService,
+                        UserRepository userRepository) {
+                this.boardService = boardService;
+                this.userRepository = userRepository;
+        }
 
-    @PostMapping("/boards")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Board createBoard(
-            @RequestBody CreateBoardRequest request,
-            Authentication authentication) {
+        @PostMapping("/boards")
+        @ResponseStatus(HttpStatus.CREATED)
+        public BoardDto createBoard(
+                        @RequestBody CreateBoardRequest request,
+                        Authentication authentication) {
 
-        String email = authentication.getName();
+                String email = authentication.getName();
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow();
 
-        return boardService.createBoard(request.getName(), user);
-    }
+                Board board = boardService.createBoard(request.getName(), user);
 
-    @GetMapping("/boards")
-    public List<BoardDto> getBoards(Authentication authentication) {
+                return BoardDto.from(board);
+        }
 
-        String email = authentication.getName();
+        @GetMapping("/boards")
+        public List<BoardDto> getBoards(Authentication authentication) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+                String email = authentication.getName();
 
-        return boardService.getBoardsForUser(user)
-                .stream()
-                .map(BoardDto::from)
-                .toList();
-    }
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow();
 
-    @GetMapping("/boards/{id}")
-    public BoardDto getBoardById(
-            @PathVariable Long id,
-            Authentication authentication) {
+                return boardService.getBoardsForUser(user)
+                                .stream()
+                                .map(BoardDto::from)
+                                .toList();
+        }
 
-        String email = authentication.getName();
+        @GetMapping("/boards/{id}")
+        public BoardDto getBoardById(
+                        @PathVariable Long id,
+                        Authentication authentication) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+                String email = authentication.getName();
 
-        Board board = boardService.getBoardById(id, user);
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow();
 
-        return BoardDto.from(board);
-    }
+                Board board = boardService.getBoardById(id, user);
 
-    @PutMapping("/boards/{id}")
-    public BoardDto updateBoard(
-            @PathVariable Long id,
-            @RequestBody CreateBoardRequest request,
-            Authentication authentication) {
+                return BoardDto.from(board);
+        }
 
-        String email = authentication.getName();
+        @PutMapping("/boards/{id}")
+        public BoardDto updateBoard(
+                        @PathVariable Long id,
+                        @RequestBody CreateBoardRequest request,
+                        Authentication authentication) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+                String email = authentication.getName();
 
-        Board updated = boardService.updateBoard(id, request.getName(), user);
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow();
 
-        return BoardDto.from(updated);
-    }
+                Board updated = boardService.updateBoard(id, request.getName(), user);
 
-    @DeleteMapping("/boards/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBoard(
-            @PathVariable Long id,
-            Authentication authentication) {
+                return BoardDto.from(updated);
+        }
 
-        String email = authentication.getName();
+        @DeleteMapping("/boards/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void deleteBoard(
+                        @PathVariable Long id,
+                        Authentication authentication) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+                String email = authentication.getName();
 
-        boardService.deleteBoard(id, user);
-    }
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow();
+
+                boardService.deleteBoard(id, user);
+        }
 }
