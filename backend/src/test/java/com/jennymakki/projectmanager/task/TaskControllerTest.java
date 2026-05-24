@@ -1,4 +1,4 @@
-package com.jennymakki.projectmanager.list;
+package com.jennymakki.projectmanager.task;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.jennymakki.projectmanager.board.Board;
 import com.jennymakki.projectmanager.board.BoardRepository;
+import com.jennymakki.projectmanager.list.TaskList;
+import com.jennymakki.projectmanager.list.TaskListRepository;
 import com.jennymakki.projectmanager.security.JwtService;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
@@ -24,7 +26,7 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class TaskListControllerTest {
+class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,10 +41,14 @@ class TaskListControllerTest {
     private TaskListRepository taskListRepository;
 
     @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
     private JwtService jwtService;
 
     @BeforeEach
     void setUp() {
+        taskRepository.deleteAll();
         taskListRepository.deleteAll();
         boardRepository.deleteAll();
         userRepository.deleteAll();
@@ -53,7 +59,7 @@ class TaskListControllerTest {
     }
 
     @Test
-    void shouldCreateTaskList_whenOwner() throws Exception {
+    void shouldCreateTask() throws Exception {
 
         User user = userRepository.save(
                 new User("alice@test.com", "password"));
@@ -63,22 +69,27 @@ class TaskListControllerTest {
         Board board = boardRepository.save(
                 new Board("Board", user));
 
+        TaskList list = taskListRepository.save(
+                new TaskList("List", board));
+
         String body = """
         {
-            "name": "To Do"
+            "title": "My Task",
+            "description": "Some desc"
         }
         """;
 
-        mockMvc.perform(post("/boards/" + board.getId() + "/lists")
+        mockMvc.perform(post("/lists/" + list.getId() + "/tasks")
                 .header("Authorization", "Bearer " + jwt)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("To Do"));
+                .andExpect(jsonPath("$.title").value("My Task"))
+                .andExpect(jsonPath("$.status").value("TODO"));
     }
 
     @Test
-    void shouldGetListsForBoard() throws Exception {
+    void shouldGetTasks() throws Exception {
 
         User user = userRepository.save(
                 new User("alice@test.com", "password"));
@@ -88,17 +99,76 @@ class TaskListControllerTest {
         Board board = boardRepository.save(
                 new Board("Board", user));
 
-        taskListRepository.save(new TaskList("List 1", board));
-        taskListRepository.save(new TaskList("List 2", board));
+        TaskList list = taskListRepository.save(
+                new TaskList("List", board));
 
-        mockMvc.perform(get("/boards/" + board.getId() + "/lists")
+        taskRepository.save(new Task("T1", "D1", list));
+        taskRepository.save(new Task("T2", "D2", list));
+
+        mockMvc.perform(get("/lists/" + list.getId() + "/tasks")
                 .header("Authorization", "Bearer " + jwt))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
-    void shouldReturnForbidden_whenNotBoardOwner() throws Exception {
+    void shouldUpdateTask() throws Exception {
+
+        User user = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        String jwt = token(user);
+
+        Board board = boardRepository.save(
+                new Board("Board", user));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("List", board));
+
+        Task task = taskRepository.save(
+                new Task("Old Title", "Old Desc", list));
+
+        String body = """
+        {
+            "title": "New Title",
+            "description": "New Desc",
+            "status": "DONE"
+        }
+        """;
+
+        mockMvc.perform(put("/tasks/" + task.getId())
+                .header("Authorization", "Bearer " + jwt)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("New Title"))
+                .andExpect(jsonPath("$.status").value("DONE"));
+    }
+
+    @Test
+    void shouldDeleteTask() throws Exception {
+
+        User user = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        String jwt = token(user);
+
+        Board board = boardRepository.save(
+                new Board("Board", user));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("List", board));
+
+        Task task = taskRepository.save(
+                new Task("Task", "Desc", list));
+
+        mockMvc.perform(delete("/tasks/" + task.getId())
+                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturnForbidden_whenNotOwner() throws Exception {
 
         User owner = userRepository.save(
                 new User("alice@test.com", "password"));
@@ -111,13 +181,21 @@ class TaskListControllerTest {
         Board board = boardRepository.save(
                 new Board("Board", owner));
 
+        TaskList list = taskListRepository.save(
+                new TaskList("List", board));
+
+        Task task = taskRepository.save(
+                new Task("Task", "Desc", list));
+
         String body = """
         {
-            "name": "Hack attempt"
+            "title": "Hack",
+            "description": "Try",
+            "status": "DONE"
         }
         """;
 
-        mockMvc.perform(post("/boards/" + board.getId() + "/lists")
+        mockMvc.perform(put("/tasks/" + task.getId())
                 .header("Authorization", "Bearer " + jwt)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -127,126 +205,7 @@ class TaskListControllerTest {
     @Test
     void shouldReturnUnauthorized_whenNoAuth() throws Exception {
 
-        mockMvc.perform(get("/boards/999/lists"))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void shouldUpdateTaskList_whenBoardOwner() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        Board board = boardRepository.save(
-                new Board("Board", user));
-
-        TaskList list = taskListRepository.save(
-                new TaskList("Old Name", board));
-
-        String body = """
-        {
-            "name": "Updated Name"
-        }
-        """;
-
-        mockMvc.perform(put("/boards/" + board.getId() + "/lists/" + list.getId())
-                .header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Updated Name"));
-    }
-
-    @Test
-    void shouldReturnForbidden_whenNotBoardOwnerUpdatingList() throws Exception {
-
-        User owner = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        User bob = userRepository.save(
-                new User("bob@test.com", "password"));
-
-        String jwt = token(bob);
-
-        Board board = boardRepository.save(
-                new Board("Board", owner));
-
-        TaskList list = taskListRepository.save(
-                new TaskList("Secret List", board));
-
-        String body = """
-        {
-            "name": "Hacked"
-        }
-        """;
-
-        mockMvc.perform(put("/boards/" + board.getId() + "/lists/" + list.getId())
-                .header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldReturnUnauthorized_whenNoAuthUpdatingList() throws Exception {
-
-        mockMvc.perform(put("/boards/999/lists/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                {
-                    "name": "Updated"
-                }
-                """))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void shouldDeleteTaskList_whenBoardOwner() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        Board board = boardRepository.save(
-                new Board("Board", user));
-
-        TaskList list = taskListRepository.save(
-                new TaskList("To Delete", board));
-
-        mockMvc.perform(delete("/boards/" + board.getId() + "/lists/" + list.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    void shouldReturnForbidden_whenNotBoardOwnerDeletingList() throws Exception {
-
-        User owner = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        User bob = userRepository.save(
-                new User("bob@test.com", "password"));
-
-        String jwt = token(bob);
-
-        Board board = boardRepository.save(
-                new Board("Board", owner));
-
-        TaskList list = taskListRepository.save(
-                new TaskList("Secret", board));
-
-        mockMvc.perform(delete("/boards/" + board.getId() + "/lists/" + list.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldReturnUnauthorized_whenNoAuthDeletingList() throws Exception {
-
-        mockMvc.perform(delete("/boards/999/lists/999"))
+        mockMvc.perform(get("/lists/1/tasks"))
                 .andExpect(status().isUnauthorized());
     }
 }

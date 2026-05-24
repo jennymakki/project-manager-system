@@ -39,7 +39,7 @@ public class BoardController {
                 String email = authentication.getName();
 
                 User user = userRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 Board board = boardService.createBoard(request.getName(), user);
 
@@ -52,7 +52,7 @@ public class BoardController {
                 String email = authentication.getName();
 
                 User user = userRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 return boardService.getBoardsForUser(user)
                                 .stream()
@@ -68,7 +68,7 @@ public class BoardController {
                 String email = authentication.getName();
 
                 User user = userRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 Board board = boardService.getBoardById(id, user);
 
@@ -84,7 +84,7 @@ public class BoardController {
                 String email = authentication.getName();
 
                 User user = userRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 Board updated = boardService.updateBoard(id, request.getName(), user);
 
@@ -100,7 +100,7 @@ public class BoardController {
                 String email = authentication.getName();
 
                 User user = userRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 boardService.deleteBoard(id, user);
         }

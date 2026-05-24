@@ -3,6 +3,7 @@ package com.jennymakki.projectmanager.security;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,11 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
+        if (!enabled) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         System.out.println("JwtFilter is running");
 
         String authHeader = request.getHeader("Authorization");
@@ -43,15 +49,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String email = jwtService.extractEmail(token);
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            Collections.emptyList());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    email,
+                    null,
+                    Collections.emptyList());
 
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);
     }
+
+    @Value("${security.jwt.enabled:true}")
+    private boolean enabled;
+
 }

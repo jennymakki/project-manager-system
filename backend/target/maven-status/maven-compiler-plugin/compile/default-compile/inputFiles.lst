@@ -20,5 +20,13 @@
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/list/dto/TaskListDto.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/security/JwtFilter.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/security/JwtService.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/Task.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/TaskController.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/TaskRepository.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/TaskService.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/TaskStatus.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/dto/CreateTaskRequest.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/dto/TaskDto.java
+/Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/task/dto/UpdateTaskRequest.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/user/User.java
 /Users/themakkis/project-manager-system/backend/src/main/java/com/jennymakki/projectmanager/user/UserRepository.java

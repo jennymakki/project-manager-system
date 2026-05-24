@@ -30,7 +30,7 @@ public class BoardService {
     public Board getBoardById(Long id, User user) {
 
         Board board = boardRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
         User owner = board.getOwner();
 
@@ -44,7 +44,7 @@ public class BoardService {
     public Board updateBoard(Long id, String name, User user) {
 
         Board board = boardRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
         if (!board.getOwner().getEmail().equals(user.getEmail())) {
             throw new AccessDeniedException("Not owner");
@@ -58,7 +58,7 @@ public class BoardService {
     public void deleteBoard(Long id, User user) {
 
         Board board = boardRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
         if (!board.getOwner().getEmail().equals(user.getEmail())) {
             throw new AccessDeniedException("Not owner");

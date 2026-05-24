@@ -40,7 +40,7 @@ public class TaskListController {
                         Authentication auth) {
 
                 User user = userRepository.findByEmail(auth.getName())
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 TaskList list = taskListService.createList(boardId, request.getName(), user);
 
@@ -53,7 +53,7 @@ public class TaskListController {
                         Authentication auth) {
 
                 User user = userRepository.findByEmail(auth.getName())
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 return taskListService.getLists(boardId, user)
                                 .stream()
@@ -68,7 +68,7 @@ public class TaskListController {
                         Authentication authentication) {
 
                 User user = userRepository.findByEmail(authentication.getName())
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 TaskList updated = taskListService.updateList(
                                 id,
@@ -85,7 +85,7 @@ public class TaskListController {
                         Authentication authentication) {
 
                 User user = userRepository.findByEmail(authentication.getName())
-                                .orElseThrow();
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 taskListService.deleteList(id, user);
         }

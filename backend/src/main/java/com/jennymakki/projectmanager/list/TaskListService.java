@@ -24,7 +24,7 @@ public class TaskListService {
     public TaskList createList(Long boardId, String name, User user) {
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
 
         if (!board.getOwner().getId().equals(user.getId())) {
             throw new AccessDeniedException("Not owner");
@@ -37,7 +37,7 @@ public class TaskListService {
     public List<TaskList> getLists(Long boardId, User user) {
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
 
         if (!board.getOwner().getId().equals(user.getId())) {
             throw new AccessDeniedException("Not owner");
@@ -49,7 +49,7 @@ public class TaskListService {
     public TaskList updateList(Long listId, String name, User user) {
 
         TaskList list = taskListRepository.findById(listId)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
 
         Board board = list.getBoard();
 
@@ -65,7 +65,7 @@ public class TaskListService {
     public void deleteList(Long id, User user) {
 
         TaskList list = taskListRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
 
         Board board = list.getBoard();
 
