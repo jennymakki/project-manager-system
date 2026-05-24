@@ -1,7 +1,9 @@
 package com.jennymakki.projectmanager.auth.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jennymakki.projectmanager.security.JwtService;
 import com.jennymakki.projectmanager.user.User;
@@ -26,7 +28,9 @@ public class AuthService {
     public void register(String email, String password) {
 
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Email already exists");
         }
 
         String hashedPassword = passwordEncoder.encode(password);
@@ -37,20 +41,19 @@ public class AuthService {
 
     public String login(String email, String password) {
 
-    User user = userRepository.findByEmail(email)
-            .orElseThrow(() ->
-                    new RuntimeException("Invalid credentials"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Invalid credentials"));
 
-    boolean matches =
-            passwordEncoder.matches(password, user.getPassword());
+        boolean matches = passwordEncoder.matches(password, user.getPassword());
 
-    if (!matches) {
-        throw new RuntimeException("Invalid credentials");
+        if (!matches) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid credentials");
+        }
+
+        return jwtService.generateToken(user.getId(), user.getEmail());
     }
-
-    return jwtService.generateToken(
-            user.getId(),
-            user.getEmail()
-    );
-}
 }

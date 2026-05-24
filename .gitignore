@@ -1,1 +1,27 @@
+# Maven
+target/
+!**/src/main/**/target/
+
+# IntelliJ / VS Code
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Java
+*.class
+
+# Environment variables
 .env
+
+# Spring Boot
+application-local.yml
+application-dev.yml
+
+# Test reports
+surefire-reports/

@@ -2,7 +2,6 @@ package com.jennymakki.projectmanager.board;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,14 +18,9 @@ public class BoardController {
     private final UserRepository userRepository;
 
     public BoardController(BoardService boardService,
-                           UserRepository userRepository) {
+            UserRepository userRepository) {
         this.boardService = boardService;
         this.userRepository = userRepository;
-    }
-
-    @GetMapping("/boards")
-    public String test() {
-        return "ok";
     }
 
     @PostMapping("/boards")

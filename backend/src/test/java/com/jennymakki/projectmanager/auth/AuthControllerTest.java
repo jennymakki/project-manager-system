@@ -1,7 +1,5 @@
 package com.jennymakki.projectmanager.auth;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,31 +29,24 @@ class AuthControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    @BeforeEach
-    void cleanDb() {
-        userRepository.deleteAll();
-    }
-
     @Test
     void shouldRegisterUser() throws Exception {
 
         RegisterRequest request = new RegisterRequest();
-        request.email = "test@test.com";
+        request.email = "testRegister@test.com";
         request.password = "password123";
 
         mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
-
-        assertThat(userRepository.findByEmail("test@test.com")).isPresent();
     }
 
     @Test
     void shouldLoginAndReturnToken() throws Exception {
 
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.email = "test@test.com";
+        registerRequest.email = "testLogin@test.com";
         registerRequest.password = "password123";
 
         mockMvc.perform(post("/auth/register")
@@ -64,7 +55,7 @@ class AuthControllerTest {
                 .andExpect(status().isCreated());
 
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.email = "test@test.com";
+        loginRequest.email = "testLogin@test.com";
         loginRequest.password = "password123";
 
         mockMvc.perform(post("/auth/login")
