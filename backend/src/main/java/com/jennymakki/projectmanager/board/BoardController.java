@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,4 +71,21 @@ public class BoardController {
 
         return BoardDto.from(board);
     }
+
+    @PutMapping("/boards/{id}")
+public BoardDto updateBoard(
+        @PathVariable Long id,
+        @RequestBody CreateBoardRequest request,
+        Authentication authentication) {
+
+    String email = authentication.getName();
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow();
+
+    Board updated = boardService.updateBoard(id, request.getName(), user);
+
+    return BoardDto.from(updated);
+}
+
 }

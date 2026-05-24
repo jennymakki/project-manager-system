@@ -2,6 +2,7 @@ package com.jennymakki.projectmanager.board;
 
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.jennymakki.projectmanager.user.User;
@@ -26,18 +27,31 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-public Board getBoardById(Long id, User user) {
+    public Board getBoardById(Long id, User user) {
 
-    Board board = boardRepository.findById(id)
-            .orElseThrow();
+        Board board = boardRepository.findById(id)
+                .orElseThrow();
 
-    User owner = board.getOwner();
+        User owner = board.getOwner();
 
-    if (owner == null || !owner.getId().equals(user.getId())) {
-        throw new org.springframework.security.access.AccessDeniedException("Not owner");
+        if (owner == null || !owner.getId().equals(user.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException("Not owner");
+        }
+
+        return board;
     }
 
-    return board;
-}
+    public Board updateBoard(Long id, String name, User user) {
 
+        Board board = boardRepository.findById(id)
+                .orElseThrow();
+
+        if (!board.getOwner().getEmail().equals(user.getEmail())) {
+            throw new AccessDeniedException("Not owner");
+        }
+
+        board.setName(name);
+
+        return boardRepository.save(board);
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -116,4 +117,52 @@ class BoardControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    @WithMockUser(username = "alice@test.com")
+    void shouldUpdateBoard_whenOwner() throws Exception {
+
+        User user = new User("alice@test.com", "password");
+        userRepository.save(user);
+
+        Board board = new Board("Old Name", user);
+        board = boardRepository.save(board);
+
+        String requestBody = """
+                {
+                    "name": "Updated Name"
+                }
+                """;
+
+        mockMvc.perform(put("/boards/" + board.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Name"))
+                .andExpect(jsonPath("$.id").value(board.getId()));
+    }
+
+    @Test
+    @WithMockUser(username = "bob@test.com")
+    void shouldReturnForbidden_whenNotOwnerUpdating() throws Exception {
+
+        User owner = new User("alice@test.com", "password");
+        userRepository.save(owner);
+
+        User otherUser = new User("bob@test.com", "password");
+        userRepository.save(otherUser);
+
+        Board board = new Board("Secret Board", owner);
+        board = boardRepository.save(board);
+
+        String requestBody = """
+                {
+                    "name": "Hacked Name"
+                }
+                """;
+
+        mockMvc.perform(put("/boards/" + board.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isForbidden());
+    }
 }
