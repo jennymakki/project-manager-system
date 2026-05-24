@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -173,6 +174,52 @@ class TaskListControllerTest {
         mockMvc.perform(put("/boards/1/lists/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "alice@test.com")
+    void shouldDeleteTaskList_whenBoardOwner() throws Exception {
+
+        User user = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        Board board = boardRepository.save(
+                new Board("Board", user));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("To Delete", board));
+
+        mockMvc.perform(delete(
+                "/boards/" + board.getId() + "/lists/" + list.getId()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(username = "bob@test.com")
+    void shouldReturnForbidden_whenNotBoardOwnerDeletingList() throws Exception {
+
+        User owner = userRepository.save(
+                new User("alice@test.com", "password"));
+
+        User other = userRepository.save(
+                new User("bob@test.com", "password"));
+
+        Board board = boardRepository.save(
+                new Board("Board", owner));
+
+        TaskList list = taskListRepository.save(
+                new TaskList("Secret", board));
+
+        mockMvc.perform(delete(
+                "/boards/" + board.getId() + "/lists/" + list.getId()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnUnauthorized_whenNoAuthDeletingList() throws Exception {
+
+        mockMvc.perform(delete("/boards/1/lists/1"))
                 .andExpect(status().isUnauthorized());
     }
 }

@@ -61,4 +61,18 @@ public class TaskListService {
 
         return taskListRepository.save(list);
     }
+
+    public void deleteList(Long id, User user) {
+
+        TaskList list = taskListRepository.findById(id)
+                .orElseThrow();
+
+        Board board = list.getBoard();
+
+        if (!board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner");
+        }
+
+        taskListRepository.delete(list);
+    }
 }
