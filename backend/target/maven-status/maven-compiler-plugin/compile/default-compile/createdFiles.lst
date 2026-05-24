@@ -10,6 +10,7 @@ com/jennymakki/projectmanager/board/BoardRepository.class
 com/jennymakki/projectmanager/board/BoardController.class
 com/jennymakki/projectmanager/board/Board.class
 com/jennymakki/projectmanager/auth/dto/LoginRequest.class
+com/jennymakki/projectmanager/board/dto/BoardDto.class
 com/jennymakki/projectmanager/auth/service/AuthService.class
 com/jennymakki/projectmanager/security/JwtFilter.class
 com/jennymakki/projectmanager/auth/dto/RegisterRequest.class
