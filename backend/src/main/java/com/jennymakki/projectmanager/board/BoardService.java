@@ -54,4 +54,16 @@ public class BoardService {
 
         return boardRepository.save(board);
     }
+
+    public void deleteBoard(Long id, User user) {
+
+        Board board = boardRepository.findById(id)
+                .orElseThrow();
+
+        if (!board.getOwner().getEmail().equals(user.getEmail())) {
+            throw new AccessDeniedException("Not owner");
+        }
+
+        boardRepository.delete(board);
+    }
 }

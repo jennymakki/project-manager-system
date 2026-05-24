@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,19 +74,32 @@ public class BoardController {
     }
 
     @PutMapping("/boards/{id}")
-public BoardDto updateBoard(
-        @PathVariable Long id,
-        @RequestBody CreateBoardRequest request,
-        Authentication authentication) {
+    public BoardDto updateBoard(
+            @PathVariable Long id,
+            @RequestBody CreateBoardRequest request,
+            Authentication authentication) {
 
-    String email = authentication.getName();
+        String email = authentication.getName();
 
-    User user = userRepository.findByEmail(email)
-            .orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
 
-    Board updated = boardService.updateBoard(id, request.getName(), user);
+        Board updated = boardService.updateBoard(id, request.getName(), user);
 
-    return BoardDto.from(updated);
-}
+        return BoardDto.from(updated);
+    }
 
+    @DeleteMapping("/boards/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBoard(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
+
+        boardService.deleteBoard(id, user);
+    }
 }

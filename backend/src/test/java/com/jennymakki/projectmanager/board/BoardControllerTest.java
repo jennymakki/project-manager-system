@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -164,5 +165,43 @@ class BoardControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "alice@test.com")
+    void shouldDeleteBoard_whenOwner() throws Exception {
+
+        User user = new User("alice@test.com", "password");
+        userRepository.save(user);
+
+        Board board = new Board("To Delete", user);
+        board = boardRepository.save(board);
+
+        mockMvc.perform(delete("/boards/" + board.getId()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(username = "bob@test.com")
+    void shouldReturnForbidden_whenNotOwnerDeleting() throws Exception {
+
+        User owner = new User("alice@test.com", "password");
+        userRepository.save(owner);
+
+        User otherUser = new User("bob@test.com", "password");
+        userRepository.save(otherUser);
+
+        Board board = new Board("Secret Board", owner);
+        board = boardRepository.save(board);
+
+        mockMvc.perform(delete("/boards/" + board.getId()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnUnauthorized_whenNoAuthDeleting() throws Exception {
+
+        mockMvc.perform(delete("/boards/1"))
+                .andExpect(status().isUnauthorized());
     }
 }
