@@ -18,4 +18,12 @@ public class BoardService {
     public List<Board> getBoardsForUser(User user) {
         return boardRepository.findByOwner(user);
     }
+
+    public Board createBoard(String name, User owner) {
+
+    Board board = new Board(name, owner);
+
+    return boardRepository.save(board);
+}
+
 }
