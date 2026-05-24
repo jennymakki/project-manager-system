@@ -51,8 +51,8 @@ class BoardControllerTest {
                 """;
 
         mockMvc.perform(post("/boards")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                 .andExpect(status().isCreated());
     }
 
@@ -75,4 +75,45 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[1].name").exists());
     }
+
+    @Test
+    @WithMockUser(username = "alice@test.com")
+    void shouldGetBoardById_whenOwner() throws Exception {
+
+        User user = new User("alice@test.com", "password");
+        userRepository.save(user);
+
+        Board board = new Board("My Board", user);
+        board = boardRepository.save(board);
+
+        mockMvc.perform(get("/boards/" + board.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("My Board"))
+                .andExpect(jsonPath("$.id").value(board.getId()));
+    }
+
+    @Test
+    @WithMockUser(username = "bob@test.com")
+    void shouldReturnForbidden_whenNotOwner() throws Exception {
+
+        User owner = new User("alice@test.com", "password");
+        userRepository.save(owner);
+
+        User otherUser = new User("bob@test.com", "password");
+        userRepository.save(otherUser);
+
+        Board board = new Board("Secret Board", owner);
+        board = boardRepository.save(board);
+
+        mockMvc.perform(get("/boards/" + board.getId()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnUnauthorized_whenNoAuth() throws Exception {
+
+        mockMvc.perform(get("/boards/1"))
+                .andExpect(status().isUnauthorized());
+    }
+
 }

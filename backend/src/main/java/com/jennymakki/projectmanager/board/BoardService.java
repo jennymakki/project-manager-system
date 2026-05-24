@@ -21,9 +21,23 @@ public class BoardService {
 
     public Board createBoard(String name, User owner) {
 
-    Board board = new Board(name, owner);
+        Board board = new Board(name, owner);
 
-    return boardRepository.save(board);
+        return boardRepository.save(board);
+    }
+
+public Board getBoardById(Long id, User user) {
+
+    Board board = boardRepository.findById(id)
+            .orElseThrow();
+
+    User owner = board.getOwner();
+
+    if (owner == null || !owner.getId().equals(user.getId())) {
+        throw new org.springframework.security.access.AccessDeniedException("Not owner");
+    }
+
+    return board;
 }
 
 }
