@@ -1,10 +1,11 @@
 package com.jennymakki.projectmanager.task;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.jennymakki.projectmanager.list.TaskList;
 import com.jennymakki.projectmanager.list.TaskListRepository;
@@ -39,7 +40,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> getTasks(Long listId, User user) {
+    public Page<Task> getTasks(Long listId, User user, Pageable pageable) {
 
         TaskList list = taskListRepository.findById(listId)
                 .orElseThrow(() -> new IllegalArgumentException("List not found"));
@@ -48,7 +49,7 @@ public class TaskService {
             throw new AccessDeniedException("Not owner");
         }
 
-        return taskRepository.findByTaskListId(listId);
+        return taskRepository.findByTaskListId(listId, pageable);
     }
 
     public Task updateTask(Long taskId,

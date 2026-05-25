@@ -91,7 +91,7 @@ class TaskControllerTest {
                 mockMvc.perform(get("/lists/" + list.getId() + "/tasks")
                                 .header("Authorization", "Bearer " + jwt))
                                 .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.length()").value(2));
+                                .andExpect(jsonPath("$.content.length()").value(2));
         }
 
         @Test
@@ -256,5 +256,29 @@ class TaskControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body))
                                 .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void shouldReturnPagedTasks() throws Exception {
+
+                User user = userRepository.save(new User("alice@test.com", "password"));
+                String jwt = token(user);
+
+                Board board = boardRepository.save(new Board("Board", user));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                for (int i = 1; i <= 15; i++) {
+                        taskRepository.save(new Task("Task " + i, "Desc", list));
+                }
+
+                mockMvc.perform(get("/lists/" + list.getId() + "/tasks")
+                                .param("page", "0")
+                                .param("size", "10")
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.content.length()").value(10))
+                                .andExpect(jsonPath("$.totalElements").value(15))
+                                .andExpect(jsonPath("$.totalPages").value(2))
+                                .andExpect(jsonPath("$.number").value(0));
         }
 }

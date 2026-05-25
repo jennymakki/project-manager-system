@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.jennymakki.projectmanager.task.dto.CreateTaskRequest;
 import com.jennymakki.projectmanager.task.dto.TaskDto;
@@ -46,17 +48,16 @@ public class TaskController {
         }
 
         @GetMapping("/lists/{listId}/tasks")
-        public List<TaskDto> getTasks(
+        public Page<TaskDto> getTasks(
                         @PathVariable Long listId,
+                        Pageable pageable,
                         Authentication auth) {
 
                 User user = userRepository.findByEmail(auth.getName())
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                return taskService.getTasks(listId, user)
-                                .stream()
-                                .map(TaskDto::from)
-                                .toList();
+                return taskService.getTasks(listId, user, pageable)
+                                .map(TaskDto::from);
         }
 
         @PutMapping("/tasks/{taskId}")
