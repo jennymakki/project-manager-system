@@ -172,4 +172,89 @@ class TaskControllerTest {
                 mockMvc.perform(get("/lists/1/tasks"))
                                 .andExpect(status().isUnauthorized());
         }
+
+        @Test
+        void shouldAssignUserToTask() throws Exception {
+
+                User owner = userRepository.save(new User("alice@test.com", "password"));
+                User assigned = userRepository.save(new User("bob@test.com", "password"));
+
+                String jwt = token(owner);
+
+                Board board = boardRepository.save(new Board("Board", owner));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                Task task = taskRepository.save(new Task("Task", "Desc", list));
+
+                String body = """
+                                {
+                                    "title": "Updated",
+                                    "description": "Updated",
+                                    "status": "TODO",
+                                    "assignedUserId": %d
+                                }
+                                """.formatted(assigned.getId());
+
+                mockMvc.perform(put("/tasks/" + task.getId())
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.assignedToId").value(assigned.getId()));
+        }
+
+        @Test
+        void shouldSetDueDate() throws Exception {
+
+                User owner = userRepository.save(new User("alice@test.com", "password"));
+                String jwt = token(owner);
+
+                Board board = boardRepository.save(new Board("Board", owner));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                Task task = taskRepository.save(new Task("Task", "Desc", list));
+
+                String body = """
+                                {
+                                    "title": "Updated",
+                                    "description": "Updated",
+                                    "status": "TODO",
+                                    "dueDate": "2099-01-01T10:00:00"
+                                }
+                                """;
+
+                mockMvc.perform(put("/tasks/" + task.getId())
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.dueDate").exists());
+        }
+
+        @Test
+        void shouldRejectPastDueDate() throws Exception {
+
+                User owner = userRepository.save(new User("alice@test.com", "password"));
+                String jwt = token(owner);
+
+                Board board = boardRepository.save(new Board("Board", owner));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                Task task = taskRepository.save(new Task("Task", "Desc", list));
+
+                String body = """
+                                {
+                                    "title": "Updated",
+                                    "description": "Updated",
+                                    "status": "TODO",
+                                    "dueDate": "2000-01-01T10:00:00"
+                                }
+                                """;
+
+                mockMvc.perform(put("/tasks/" + task.getId())
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
+                                .andExpect(status().isBadRequest());
+        }
 }
