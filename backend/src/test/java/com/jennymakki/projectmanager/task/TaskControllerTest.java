@@ -307,4 +307,25 @@ class TaskControllerTest {
                                 .andExpect(jsonPath("$.content.length()").value(1))
                                 .andExpect(jsonPath("$.content[0].status").value("DONE"));
         }
+
+        @Test
+        void shouldSearchTasksByTitle() throws Exception {
+
+                User user = userRepository.save(new User("alice@test.com", "password"));
+                String jwt = token(user);
+
+                Board board = boardRepository.save(new Board("Board", user));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                taskRepository.save(new Task("Backend API", "desc", list));
+                taskRepository.save(new Task("Frontend UI", "desc", list));
+
+                mockMvc.perform(get("/lists/" + list.getId() + "/tasks")
+                                .param("search", "backend")
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.content.length()").value(1))
+                                .andExpect(jsonPath("$.content[0].title").value("Backend API"));
+        }
+
 }

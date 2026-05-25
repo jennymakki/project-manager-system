@@ -43,6 +43,7 @@ public class TaskService {
 
     public Page<Task> getTasks(
             Long listId,
+            String search,
             TaskStatus status,
             LocalDateTime from,
             LocalDateTime to,
@@ -58,6 +59,7 @@ public class TaskService {
 
         Specification<Task> spec = Specification
                 .where(TaskSpecifications.belongsToUser(user))
+                .and(TaskSpecifications.titleContains(search))
                 .and(TaskSpecifications.hasStatus(status))
                 .and(TaskSpecifications.dueAfter(from))
                 .and(TaskSpecifications.dueBefore(to))

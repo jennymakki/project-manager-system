@@ -59,6 +59,8 @@ public class TaskController {
 
                         @RequestParam(required = false) LocalDateTime to,
 
+                        @RequestParam(required = false) String search,
+
                         Pageable pageable,
 
                         Authentication auth) {
@@ -68,6 +70,7 @@ public class TaskController {
 
                 return taskService.getTasks(
                                 listId,
+                                search,
                                 status,
                                 from,
                                 to,
