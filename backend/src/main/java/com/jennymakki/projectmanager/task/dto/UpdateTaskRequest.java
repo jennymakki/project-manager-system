@@ -1,5 +1,7 @@
 package com.jennymakki.projectmanager.task.dto;
 
+import java.time.LocalDateTime;
+
 import com.jennymakki.projectmanager.task.TaskStatus;
 
 public class UpdateTaskRequest {
@@ -7,6 +9,16 @@ public class UpdateTaskRequest {
     private String title;
     private String description;
     private TaskStatus status;
+    private Long assignedUserId;
+    private LocalDateTime dueDate;
+
+    public Long getAssignedUserId() {
+        return assignedUserId;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
 
     public UpdateTaskRequest() {
     }
