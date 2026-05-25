@@ -25,3 +25,7 @@ application-dev.yml
 
 # Test reports
 surefire-reports/
+
+# Target
+target/
+*.log

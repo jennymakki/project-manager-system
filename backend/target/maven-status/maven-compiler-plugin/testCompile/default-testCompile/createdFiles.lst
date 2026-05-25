@@ -1,8 +1,0 @@
-com/jennymakki/projectmanager/board/BoardControllerTest.class
-com/jennymakki/projectmanager/list/TaskListControllerTest.class
-com/jennymakki/projectmanager/board/BoardRepositoryTest.class
-com/jennymakki/projectmanager/task/TaskControllerTest.class
-com/jennymakki/projectmanager/user/UserRepositoryTest.class
-com/jennymakki/projectmanager/board/BoardServiceTest.class
-com/jennymakki/projectmanager/ProjectManagerApplicationTest.class
-com/jennymakki/projectmanager/auth/AuthControllerTest.class

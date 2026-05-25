@@ -1,8 +1,0 @@
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/ProjectManagerApplicationTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/auth/AuthControllerTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/board/BoardControllerTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/board/BoardRepositoryTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/board/BoardServiceTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/list/TaskListControllerTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/task/TaskControllerTest.java
-/Users/themakkis/project-manager-system/backend/src/test/java/com/jennymakki/projectmanager/user/UserRepositoryTest.java

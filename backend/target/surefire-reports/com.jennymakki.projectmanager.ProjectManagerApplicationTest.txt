@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.jennymakki.projectmanager.ProjectManagerApplicationTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.272 s -- in com.jennymakki.projectmanager.ProjectManagerApplicationTest
