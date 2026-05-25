@@ -1,7 +1,10 @@
 package com.jennymakki.projectmanager.task;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.jennymakki.projectmanager.comment.Comment;
 import com.jennymakki.projectmanager.list.TaskList;
 import com.jennymakki.projectmanager.user.User;
 
@@ -12,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Task {
@@ -34,6 +38,9 @@ public class Task {
     private User assignedTo;
 
     private LocalDateTime dueDate;
+
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public User getAssignedTo() {
         return assignedTo;
@@ -91,5 +98,13 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
