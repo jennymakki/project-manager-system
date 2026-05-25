@@ -1,5 +1,6 @@
 package com.jennymakki.projectmanager.auth;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,11 +30,16 @@ class AuthControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+    }
+
     @Test
     void shouldRegisterUser() throws Exception {
 
         RegisterRequest request = new RegisterRequest();
-        request.email = "testRegister@test.com";
+        request.email = "register_" + System.currentTimeMillis() + "@test.com";
         request.password = "password123";
 
         mockMvc.perform(post("/auth/register")
@@ -45,8 +51,10 @@ class AuthControllerTest {
     @Test
     void shouldLoginAndReturnToken() throws Exception {
 
+        String email = "login_" + System.currentTimeMillis() + "@test.com";
+
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.email = "testLogin@test.com";
+        registerRequest.email = email;
         registerRequest.password = "password123";
 
         mockMvc.perform(post("/auth/register")
@@ -55,7 +63,7 @@ class AuthControllerTest {
                 .andExpect(status().isCreated());
 
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.email = "testLogin@test.com";
+        loginRequest.email = email;
         loginRequest.password = "password123";
 
         mockMvc.perform(post("/auth/login")

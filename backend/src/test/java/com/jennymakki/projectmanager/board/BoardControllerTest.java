@@ -15,7 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.jennymakki.projectmanager.list.TaskListRepository;
 import com.jennymakki.projectmanager.security.JwtService;
+import com.jennymakki.projectmanager.task.TaskRepository;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
 
@@ -24,204 +26,212 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @ActiveProfiles("test")
 class BoardControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @Autowired
-    private BoardRepository boardRepository;
+        @Autowired
+        private BoardRepository boardRepository;
 
-    @Autowired
-    private JwtService jwtService;
+        @Autowired
+        private JwtService jwtService;
 
-    @BeforeEach
-    void setUp() {
-        boardRepository.deleteAll();
-        userRepository.deleteAll();
-    }
+        @Autowired
+        private TaskRepository taskRepository;
 
-    private String token(User user) {
-        return jwtService.generateToken(user.getId(), user.getEmail());
-    }
+        @Autowired
+        private TaskListRepository taskListRepository;
 
-    @Test
-    void shouldCreateBoard() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        String requestBody = """
-        {
-            "name": "Project Board"
+        @BeforeEach
+        void setUp() {
+                taskRepository.deleteAll();
+                taskListRepository.deleteAll();
+                boardRepository.deleteAll();
+                userRepository.deleteAll();
         }
-        """;
 
-        mockMvc.perform(post("/boards")
-                .header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void shouldGetBoardsForUser() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        boardRepository.save(new Board("Board 1", user));
-        boardRepository.save(new Board("Board 2", user));
-
-        mockMvc.perform(get("/boards")
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").exists())
-                .andExpect(jsonPath("$[1].name").exists());
-    }
-
-    @Test
-    void shouldGetBoardById_whenOwner() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        Board board = boardRepository.save(
-                new Board("My Board", user));
-
-        mockMvc.perform(get("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("My Board"))
-                .andExpect(jsonPath("$.id").value(board.getId()));
-    }
-
-    @Test
-    void shouldReturnForbidden_whenNotOwner() throws Exception {
-
-        User owner = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        User otherUser = userRepository.save(
-                new User("bob@test.com", "password"));
-
-        String jwt = token(otherUser);
-
-        Board board = boardRepository.save(
-                new Board("Secret Board", owner));
-
-        mockMvc.perform(get("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldReturnUnauthorized_whenNoAuth() throws Exception {
-
-        mockMvc.perform(get("/boards/1"))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void shouldUpdateBoard_whenOwner() throws Exception {
-
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
-
-        String jwt = token(user);
-
-        Board board = boardRepository.save(
-                new Board("Old Name", user));
-
-        String requestBody = """
-        {
-            "name": "Updated Name"
+        private String token(User user) {
+                return jwtService.generateToken(user.getId(), user.getEmail());
         }
-        """;
 
-        mockMvc.perform(put("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Updated Name"))
-                .andExpect(jsonPath("$.id").value(board.getId()));
-    }
+        @Test
+        void shouldCreateBoard() throws Exception {
 
-    @Test
-    void shouldReturnForbidden_whenNotOwnerUpdating() throws Exception {
+                User user = userRepository.save(
+                                new User("alice@test.com", "password"));
 
-        User owner = userRepository.save(
-                new User("alice@test.com", "password"));
+                String jwt = token(user);
 
-        User otherUser = userRepository.save(
-                new User("bob@test.com", "password"));
+                String requestBody = """
+                                {
+                                    "name": "Project Board"
+                                }
+                                """;
 
-        String jwt = token(otherUser);
-
-        Board board = boardRepository.save(
-                new Board("Secret Board", owner));
-
-        String requestBody = """
-        {
-            "name": "Hacked Name"
+                mockMvc.perform(post("/boards")
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody))
+                                .andExpect(status().isCreated());
         }
-        """;
 
-        mockMvc.perform(put("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isForbidden());
-    }
+        @Test
+        void shouldGetBoardsForUser() throws Exception {
 
-    @Test
-    void shouldDeleteBoard_whenOwner() throws Exception {
+                User user = userRepository.save(
+                                new User("alice@test.com", "password"));
 
-        User user = userRepository.save(
-                new User("alice@test.com", "password"));
+                String jwt = token(user);
 
-        String jwt = token(user);
+                boardRepository.save(new Board("Board 1", user));
+                boardRepository.save(new Board("Board 2", user));
 
-        Board board = boardRepository.save(
-                new Board("To Delete", user));
+                mockMvc.perform(get("/boards")
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.length()").value(2))
+                                .andExpect(jsonPath("$[0].name").exists())
+                                .andExpect(jsonPath("$[1].name").exists());
+        }
 
-        mockMvc.perform(delete("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isNoContent());
-    }
+        @Test
+        void shouldGetBoardById_whenOwner() throws Exception {
 
-    @Test
-    void shouldReturnForbidden_whenNotOwnerDeleting() throws Exception {
+                User user = userRepository.save(
+                                new User("alice@test.com", "password"));
 
-        User owner = userRepository.save(
-                new User("alice@test.com", "password"));
+                String jwt = token(user);
 
-        User otherUser = userRepository.save(
-                new User("bob@test.com", "password"));
+                Board board = boardRepository.save(
+                                new Board("My Board", user));
 
-        String jwt = token(otherUser);
+                mockMvc.perform(get("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.name").value("My Board"))
+                                .andExpect(jsonPath("$.id").value(board.getId()));
+        }
 
-        Board board = boardRepository.save(
-                new Board("Secret Board", owner));
+        @Test
+        void shouldReturnForbidden_whenNotOwner() throws Exception {
 
-        mockMvc.perform(delete("/boards/" + board.getId())
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isForbidden());
-    }
+                User owner = userRepository.save(
+                                new User("alice@test.com", "password"));
 
-    @Test
-    void shouldReturnUnauthorized_whenNoAuthDeleting() throws Exception {
+                User otherUser = userRepository.save(
+                                new User("bob@test.com", "password"));
 
-        mockMvc.perform(delete("/boards/1"))
-                .andExpect(status().isUnauthorized());
-    }
+                String jwt = token(otherUser);
+
+                Board board = boardRepository.save(
+                                new Board("Secret Board", owner));
+
+                mockMvc.perform(get("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void shouldReturnUnauthorized_whenNoAuth() throws Exception {
+
+                mockMvc.perform(get("/boards/1"))
+                                .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void shouldUpdateBoard_whenOwner() throws Exception {
+
+                User user = userRepository.save(
+                                new User("alice@test.com", "password"));
+
+                String jwt = token(user);
+
+                Board board = boardRepository.save(
+                                new Board("Old Name", user));
+
+                String requestBody = """
+                                {
+                                    "name": "Updated Name"
+                                }
+                                """;
+
+                mockMvc.perform(put("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.name").value("Updated Name"))
+                                .andExpect(jsonPath("$.id").value(board.getId()));
+        }
+
+        @Test
+        void shouldReturnForbidden_whenNotOwnerUpdating() throws Exception {
+
+                User owner = userRepository.save(
+                                new User("alice@test.com", "password"));
+
+                User otherUser = userRepository.save(
+                                new User("bob@test.com", "password"));
+
+                String jwt = token(otherUser);
+
+                Board board = boardRepository.save(
+                                new Board("Secret Board", owner));
+
+                String requestBody = """
+                                {
+                                    "name": "Hacked Name"
+                                }
+                                """;
+
+                mockMvc.perform(put("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody))
+                                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void shouldDeleteBoard_whenOwner() throws Exception {
+
+                User user = userRepository.save(
+                                new User("alice@test.com", "password"));
+
+                String jwt = token(user);
+
+                Board board = boardRepository.save(
+                                new Board("To Delete", user));
+
+                mockMvc.perform(delete("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void shouldReturnForbidden_whenNotOwnerDeleting() throws Exception {
+
+                User owner = userRepository.save(
+                                new User("alice@test.com", "password"));
+
+                User otherUser = userRepository.save(
+                                new User("bob@test.com", "password"));
+
+                String jwt = token(otherUser);
+
+                Board board = boardRepository.save(
+                                new Board("Secret Board", owner));
+
+                mockMvc.perform(delete("/boards/" + board.getId())
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void shouldReturnUnauthorized_whenNoAuthDeleting() throws Exception {
+
+                mockMvc.perform(delete("/boards/1"))
+                                .andExpect(status().isUnauthorized());
+        }
 }
