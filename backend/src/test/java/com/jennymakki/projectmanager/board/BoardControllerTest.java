@@ -1,6 +1,5 @@
 package com.jennymakki.projectmanager.board;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jennymakki.projectmanager.list.TaskListRepository;
 import com.jennymakki.projectmanager.security.JwtService;
@@ -21,8 +21,10 @@ import com.jennymakki.projectmanager.task.TaskRepository;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("test")
 class BoardControllerTest {
 
@@ -43,14 +45,6 @@ class BoardControllerTest {
 
         @Autowired
         private TaskListRepository taskListRepository;
-
-        @BeforeEach
-        void setUp() {
-                taskRepository.deleteAll();
-                taskListRepository.deleteAll();
-                boardRepository.deleteAll();
-                userRepository.deleteAll();
-        }
 
         private String token(User user) {
                 return jwtService.generateToken(user.getId(), user.getEmail());

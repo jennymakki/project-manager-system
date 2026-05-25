@@ -1,6 +1,5 @@
 package com.jennymakki.projectmanager.task;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,13 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jennymakki.projectmanager.board.Board;
 import com.jennymakki.projectmanager.board.BoardRepository;
@@ -27,6 +26,7 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 class TaskControllerTest {
 
         @Autowired
@@ -46,15 +46,6 @@ class TaskControllerTest {
 
         @Autowired
         private JwtService jwtService;
-
-        @BeforeEach
-        void setUp() {
-                // ❗ Viktig: child → parent order (CI fix)
-                taskRepository.deleteAll();
-                taskListRepository.deleteAll();
-                boardRepository.deleteAll();
-                userRepository.deleteAll();
-        }
 
         private String token(User user) {
                 return jwtService.generateToken(user.getId(), user.getEmail());

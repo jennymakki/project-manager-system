@@ -1,6 +1,5 @@
 package com.jennymakki.projectmanager.list;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,8 +20,11 @@ import com.jennymakki.projectmanager.security.JwtService;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("test")
 class TaskListControllerTest {
 
@@ -40,13 +42,6 @@ class TaskListControllerTest {
 
     @Autowired
     private JwtService jwtService;
-
-    @BeforeEach
-    void setUp() {
-        taskListRepository.deleteAll();
-        boardRepository.deleteAll();
-        userRepository.deleteAll();
-    }
 
     private String token(User user) {
         return jwtService.generateToken(user.getId(), user.getEmail());
