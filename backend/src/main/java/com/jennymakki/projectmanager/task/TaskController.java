@@ -22,71 +22,71 @@ import com.jennymakki.projectmanager.user.UserRepository;
 @RestController
 public class TaskController {
 
-    private final TaskService taskService;
-    private final UserRepository userRepository;
+        private final TaskService taskService;
+        private final UserRepository userRepository;
 
-    public TaskController(TaskService taskService,
-                          UserRepository userRepository) {
-        this.taskService = taskService;
-        this.userRepository = userRepository;
-    }
+        public TaskController(TaskService taskService,
+                        UserRepository userRepository) {
+                this.taskService = taskService;
+                this.userRepository = userRepository;
+        }
 
-    @PostMapping("/lists/{listId}/tasks")
-    @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto createTask(
-            @PathVariable Long listId,
-            @RequestBody CreateTaskRequest request,
-            Authentication auth) {
+        @PostMapping("/lists/{listId}/tasks")
+        @ResponseStatus(HttpStatus.CREATED)
+        public TaskDto createTask(
+                        @PathVariable Long listId,
+                        @RequestBody CreateTaskRequest request,
+                        Authentication auth) {
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return TaskDto.from(
-                taskService.createTask(listId, request.getTitle(), request.getDescription(), user)
-        );
-    }
+                return TaskDto.from(
+                                taskService.createTask(listId, request.getTitle(), request.getDescription(), user));
+        }
 
-    @GetMapping("/lists/{listId}/tasks")
-    public List<TaskDto> getTasks(
-            @PathVariable Long listId,
-            Authentication auth) {
+        @GetMapping("/lists/{listId}/tasks")
+        public List<TaskDto> getTasks(
+                        @PathVariable Long listId,
+                        Authentication auth) {
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return taskService.getTasks(listId, user)
-                .stream()
-                .map(TaskDto::from)
-                .toList();
-    }
+                return taskService.getTasks(listId, user)
+                                .stream()
+                                .map(TaskDto::from)
+                                .toList();
+        }
 
-    @PutMapping("/tasks/{taskId}")
-    public TaskDto updateTask(
-            @PathVariable Long taskId,
-            @RequestBody UpdateTaskRequest request,
-            Authentication auth) {
+        @PutMapping("/tasks/{taskId}")
+        public TaskDto updateTask(
+                        @PathVariable Long taskId,
+                        @RequestBody UpdateTaskRequest request,
+                        Authentication auth) {
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                return TaskDto.from(
+                                taskService.updateTask(
+                                                taskId,
+                                                request.getTitle(),
+                                                request.getDescription(),
+                                                request.getStatus(),
+                                                request.getAssignedUserId(),
+                                                request.getDueDate(),
+                                                user));
+        }
 
-        return TaskDto.from(
-                taskService.updateTask(taskId,
-                        request.getTitle(),
-                        request.getDescription(),
-                        request.getStatus(),
-                        user)
-        );
-    }
+        @DeleteMapping("/tasks/{taskId}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void deleteTask(
+                        @PathVariable Long taskId,
+                        Authentication auth) {
 
-    @DeleteMapping("/tasks/{taskId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(
-            @PathVariable Long taskId,
-            Authentication auth) {
+                User user = userRepository.findByEmail(auth.getName())
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        taskService.deleteTask(taskId, user);
-    }
+                taskService.deleteTask(taskId, user);
+        }
 }

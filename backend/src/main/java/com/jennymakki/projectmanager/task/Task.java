@@ -1,6 +1,9 @@
 package com.jennymakki.projectmanager.task;
 
+import java.time.LocalDateTime;
+
 import com.jennymakki.projectmanager.list.TaskList;
+import com.jennymakki.projectmanager.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +30,29 @@ public class Task {
     @ManyToOne
     private TaskList taskList;
 
-    public Task() {}
+    @ManyToOne
+    private User assignedTo;
+
+    private LocalDateTime dueDate;
+
+    public User getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Task() {
+    }
 
     public Task(String title, String description, TaskList taskList) {
         this.title = title;
