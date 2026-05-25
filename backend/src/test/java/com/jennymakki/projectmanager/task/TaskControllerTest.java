@@ -281,4 +281,30 @@ class TaskControllerTest {
                                 .andExpect(jsonPath("$.totalPages").value(2))
                                 .andExpect(jsonPath("$.number").value(0));
         }
+
+        @Test
+        void shouldFilterTasksByStatus() throws Exception {
+
+                User user = userRepository.save(new User("alice@test.com", "password"));
+                String jwt = token(user);
+
+                Board board = boardRepository.save(new Board("Board", user));
+                TaskList list = taskListRepository.save(new TaskList("List", board));
+
+                Task todo = new Task("TODO TASK", "desc", list);
+                todo.setStatus(TaskStatus.TODO);
+
+                Task done = new Task("DONE TASK", "desc", list);
+                done.setStatus(TaskStatus.DONE);
+
+                taskRepository.save(todo);
+                taskRepository.save(done);
+
+                mockMvc.perform(get("/lists/" + list.getId() + "/tasks")
+                                .param("status", "DONE")
+                                .header("Authorization", "Bearer " + jwt))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.content.length()").value(1))
+                                .andExpect(jsonPath("$.content[0].status").value("DONE"));
+        }
 }

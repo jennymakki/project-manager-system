@@ -1,5 +1,6 @@
 package com.jennymakki.projectmanager.task;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
@@ -50,13 +52,27 @@ public class TaskController {
         @GetMapping("/lists/{listId}/tasks")
         public Page<TaskDto> getTasks(
                         @PathVariable Long listId,
+
+                        @RequestParam(required = false) TaskStatus status,
+
+                        @RequestParam(required = false) LocalDateTime from,
+
+                        @RequestParam(required = false) LocalDateTime to,
+
                         Pageable pageable,
+
                         Authentication auth) {
 
                 User user = userRepository.findByEmail(auth.getName())
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                return taskService.getTasks(listId, user, pageable)
+                return taskService.getTasks(
+                                listId,
+                                status,
+                                from,
+                                to,
+                                user,
+                                pageable)
                                 .map(TaskDto::from);
         }
 

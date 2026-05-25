@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.jennymakki.projectmanager.list.TaskList;
 import com.jennymakki.projectmanager.list.TaskListRepository;
@@ -40,7 +41,13 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Page<Task> getTasks(Long listId, User user, Pageable pageable) {
+    public Page<Task> getTasks(
+            Long listId,
+            TaskStatus status,
+            LocalDateTime from,
+            LocalDateTime to,
+            User user,
+            Pageable pageable) {
 
         TaskList list = taskListRepository.findById(listId)
                 .orElseThrow(() -> new IllegalArgumentException("List not found"));
@@ -49,7 +56,14 @@ public class TaskService {
             throw new AccessDeniedException("Not owner");
         }
 
-        return taskRepository.findByTaskListId(listId, pageable);
+        Specification<Task> spec = Specification
+                .where(TaskSpecifications.belongsToUser(user))
+                .and(TaskSpecifications.hasStatus(status))
+                .and(TaskSpecifications.dueAfter(from))
+                .and(TaskSpecifications.dueBefore(to))
+                .and((root, query, cb) -> cb.equal(root.get("taskList").get("id"), listId));
+
+        return taskRepository.findAll(spec, pageable);
     }
 
     public Task updateTask(Long taskId,
