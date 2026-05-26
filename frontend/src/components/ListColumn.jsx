@@ -9,7 +9,7 @@ export default function ListColumn({ list }) {
     const fetchTasks = async () => {
       try {
         const res = await axiosClient.get(`/lists/${list.id}/tasks`);
-        setTasks(res.data.content); // PAGE response från backend
+        setTasks(res.data.content);
       } catch (err) {
         console.error(err);
       }
