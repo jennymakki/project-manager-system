@@ -1,11 +1,15 @@
 import axiosClient from "./axiosClient";
 
-export async function login(data) {
-  const response = await axiosClient.post("/auth/login", data);
-  return response.data;
-}
+export const register = async (email, password) => {
+  return axiosClient.post("/auth/register", {
+    email,
+    password,
+  });
+};
 
-export async function register(data) {
-  const response = await axiosClient.post("/auth/register", data);
-  return response.data;
-}
+export const login = async (email, password) => {
+  return axiosClient.post("/auth/login", {
+    email,
+    password,
+  });
+};
