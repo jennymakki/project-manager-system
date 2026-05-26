@@ -1,70 +1,160 @@
-# Project Manager API
+# Project Manager API (Fullstack)
 
-A backend REST API built with Spring Boot for managing projects, boards, tasks, and users.
+A full-stack project management application built with **Spring Boot + React** that allows users to create accounts, authenticate with JWT, and manage boards and tasks.
 
-This project is built using Test-Driven Development (TDD) and follows a layered architecture with domain-driven package structure.
+The project is built with a layered architecture and follows a feature-based design approach.
 
 ---
 
-## Features (MVP)
+## Features
 
-- User registration and authentication
+### Authentication
+- User registration and login
 - JWT-based authentication
-- Boards (project containers)
-- Lists within boards
-- Tasks within lists
-- Full CRUD for all entities
+- Protected routes (frontend + backend)
+- Secure password storage (BCrypt)
 
----
+### Boards (Projects)
+- Create, read, update, delete boards
+- Each user has their own boards
 
-## Planned Features
+### Dashboard
+- Displays user-specific boards
+- Protected dashboard access (requires login)
 
-- Task assignment to users
-- Due dates and status management (TODO, IN_PROGRESS, DONE)
-- Comments on tasks
-- Pagination and filtering
-- Search functionality
+### Frontend
+- React + Vite
+- Axios API layer
+- Context-based authentication handling
+- React Router protected routes
+- LocalStorage JWT persistence
 
 ---
 
 ## Architecture
 
-The project follows a feature-based layered structure:
+The backend follows a layered architecture:
 
-- Controller → API layer
-- Service → Business logic
-- Repository → Database access
-- Entity → Domain models
-- DTO → API contracts
+- **Controller** → REST API endpoints
+- **Service** → Business logic
+- **Repository** → Database access (JPA)
+- **Entity** → Domain models
+- **DTO** → API contracts
 
----
+Frontend architecture:
 
-## Testing Strategy
-
-The project is built using TDD:
-
-- Unit tests for services
-- Integration tests for controllers
-- Repository tests for database layer
-
-Each feature is developed in a Red → Green → Refactor cycle.
+- Pages (Login, Register, Dashboard)
+- API layer (axiosClient, authApi)
+- AuthContext for session handling
+- ProtectedRoute for route security
 
 ---
 
 ## Tech Stack
 
+### Backend
 - Java 25
 - Spring Boot
 - Spring Security + JWT
-- Spring Data JPA
-- PostgreSQL (dev) / H2
+- Spring Data JPA (Hibernate)
+- H2 Database (development)
 - Maven
-- Docker
+
+### Frontend
+- React (Vite)
+- React Router
+- Axios
+- Tailwind CSS
+- Context API
+
+---
+
+## Authentication Flow
+
+1. User registers an account
+2. User logs in with email + password
+3. Backend returns JWT token
+4. Token is stored in localStorage
+5. Token is sent with every API request
+6. Protected routes validate token presence
+
+---
+
+## API Overview
+
+### Auth
+- `POST /auth/register`
+- `POST /auth/login`
+
+### Boards
+- `GET /boards`
+- `POST /boards`
+- `GET /boards/{id}`
+- `PUT /boards/{id}`
+- `DELETE /boards/{id}`
+
+---
+
+## Testing Strategy
+
+The project is designed with **TDD principles in mind**, including:
+
+- Unit tests for service layer
+- Integration tests for controllers
+- Repository testing with H2 database
+
+Each feature is developed using a Red → Green → Refactor cycle.
+
+---
+
+## Current Status
+
+- Authentication system fully implemented
+- Frontend login/register flow complete
+- JWT-based protected routes working
+- Board functionality implemented in backend (frontend integration ongoing)
+- No deployment yet (local development only)
+
+---
+
+## Database
+
+- H2 in-memory database (development mode)
+- Auto-generated schema via Hibernate
+
+---
+
+## Future Improvements
+
+- Task management (lists + tasks fully connected in UI)
+- Task assignment to users
+- Due dates & status tracking (TODO, IN_PROGRESS, DONE)
+- Comments system
+- Search & filtering
+- Pagination
+- PostgreSQL production database
+- Docker deployment setup
 
 ---
 
 ## Getting Started
 
+### Backend
 ```bash
-# run the project
 mvn spring-boot:run
+```
+
+### Frontend
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## What I learned
+- JWT authentication in Spring Security
+- Full-stack integration between React and Spring Boot
+- Handling protected routes in React
+- API design with layered architecture
+- Debugging CORS and authentication issues
