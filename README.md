@@ -6,11 +6,31 @@ The project is built with a layered architecture and follows a feature-based des
 
 ---
 
+## Live Demo
+
+### Frontend (Vercel):
+
+https://project-manager-system-tawny.vercel.app
+
+- React application
+- Handles UI, authentication flow, dashboard, boards UI
+
+### Backend API (Render):
+
+https://project-manager-api-2z4a.onrender.com
+
+- Spring Boot REST API
+- JWT authentication
+- Boards, Lists, Tasks CRUD
+
+---
+
 ## Features
 
 ### Authentication
 - User registration and login
 - JWT-based authentication
+- Token stored in localStorage (PostgreSQL will be implemented)
 - Protected routes (frontend + backend)
 - Secure password storage (BCrypt)
 
