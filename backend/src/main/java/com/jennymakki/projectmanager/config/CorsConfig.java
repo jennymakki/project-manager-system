@@ -16,6 +16,8 @@ public class CorsConfig {
 
         config.addAllowedOrigin("http://localhost:5173");
 
+        config.addAllowedOrigin("https://project-manager-system.vercel.app");
+
         config.addAllowedHeader("*");
 
         config.addAllowedMethod("*");
