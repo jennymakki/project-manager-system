@@ -1,68 +1,50 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { login } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    setError("");
-
     try {
-      const data = await login({
-        email,
-        password,
-      });
+      const response = await login(email, password);
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", response.data.token);
 
-      navigate("/");
-    } catch {
-      setError("Invalid email or password");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+      alert("Login failed");
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-96 space-y-4"
-      >
-        <h1 className="text-2xl font-bold">Login</h1>
-
-        {error && (
-          <p className="text-red-500 text-sm">{error}</p>
-        )}
-
+    <div>
+      <h1>Log in</h1>
+      <form onSubmit={handleLogin}>
         <input
           type="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded"
+          placeholder="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
-          placeholder="Password"
-          className="w-full border p-2 rounded"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button
-          type="submit"
-          className="w-full bg-black text-white p-2 rounded"
-        >
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
+      <Link to="/register">Register here</Link>
     </div>
   );
 }
