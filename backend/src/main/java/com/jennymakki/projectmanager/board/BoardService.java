@@ -7,15 +7,21 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.jennymakki.projectmanager.list.TaskList;
+import com.jennymakki.projectmanager.list.TaskListRepository;
 import com.jennymakki.projectmanager.user.User;
 
 @Service
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final TaskListRepository taskListRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(
+            BoardRepository boardRepository,
+            TaskListRepository taskListRepository) {
         this.boardRepository = boardRepository;
+        this.taskListRepository = taskListRepository;
     }
 
     public List<Board> getBoardsForUser(User user) {
@@ -26,7 +32,13 @@ public class BoardService {
 
         Board board = new Board(name, owner);
 
-        return boardRepository.save(board);
+        Board savedBoard = boardRepository.save(board);
+
+        taskListRepository.save(new TaskList("TODO", savedBoard));
+        taskListRepository.save(new TaskList("IN_PROGRESS", savedBoard));
+        taskListRepository.save(new TaskList("DONE", savedBoard));
+
+        return savedBoard;
     }
 
     public Board getBoardById(Long id, User user) {

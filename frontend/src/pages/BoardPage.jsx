@@ -8,16 +8,16 @@ export default function BoardPage() {
   const { id } = useParams();
 
   const [board, setBoard] = useState(null);
-  const [lists, ] = useState([]);
+  const [lists, setLists] = useState([]);
 
   useEffect(() => {
     const fetchBoardData = async () => {
       try {
         const boardRes = await axiosClient.get(`/boards/${id}`);
-       // const listsRes = await axiosClient.get(`/boards/${id}/lists`);
+        const listsRes = await axiosClient.get(`/boards/${id}/lists`);
 
         setBoard(boardRes.data);
-        // setLists(listsRes.data);
+        setLists(listsRes.data);
       } catch (err) {
         console.error(err);
       }
