@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jennymakki.projectmanager.comment.dto.CommentResponse;
 import com.jennymakki.projectmanager.comment.dto.CreateCommentRequest;
-import com.jennymakki.projectmanager.security.JwtService;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
 
@@ -25,20 +25,18 @@ import lombok.RequiredArgsConstructor;
 public class CommentController {
 
     private final CommentService commentService;
-    private final JwtService jwtService;
     private final UserRepository userRepository;
 
     @PostMapping("/tasks/{taskId}/comments")
     public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long taskId,
             @RequestBody CreateCommentRequest request,
-            @RequestHeader("Authorization") String auth) {
+            Authentication authentication) {
 
-        String token = auth.substring(7);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
 
-        Long userId = jwtService.extractUserId(token);
-
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,13 +53,12 @@ public class CommentController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long commentId,
-            @RequestHeader("Authorization") String auth) {
+            Authentication authentication) {
 
-        String token = auth.substring(7);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
 
-        Long userId = jwtService.extractUserId(token);
-
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         commentService.deleteComment(commentId, user);
