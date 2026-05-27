@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { register } from "../api/authApi";
+import { register, login } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -14,22 +13,20 @@ export default function Register() {
     try {
       await register(email, password);
 
+      await login(email, password);
+
       alert("User created!");
 
-      navigate("/login");
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error(error);
-
       alert("Registration failed");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <form
-        onSubmit={handleRegister}
-        className="flex flex-col gap-4 w-80"
-      >
+      <form onSubmit={handleRegister} className="flex flex-col gap-4 w-80">
         <h1 className="text-2xl font-bold">Register</h1>
 
         <input
@@ -48,10 +45,7 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button
-          type="submit"
-          className="bg-black text-white p-2 rounded"
-        >
+        <button type="submit" className="bg-black text-white p-2 rounded">
           Register
         </button>
       </form>
