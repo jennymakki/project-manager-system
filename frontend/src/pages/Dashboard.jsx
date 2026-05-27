@@ -1,30 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BoardCard from "../components/BoardCard";
+import axiosClient from "../api/axiosClient";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
+  const [boards, setBoards] = useState([]);
 
-  const [boards, setBoards] = useState(() => {
-    return JSON.parse(localStorage.getItem("boards")) || [];
-  });
-
-  const saveBoards = (newBoards) => {
-    localStorage.setItem("boards", JSON.stringify(newBoards));
-    setBoards(newBoards);
-  };
-
-  const createBoard = () => {
-    if (!name.trim()) return;
-
-    const newBoard = {
-      id: Date.now(),
-      name,
+  useEffect(() => {
+    const fetchBoards = async () => {
+      try {
+        const res = await axiosClient.get("/boards");
+        setBoards(res.data);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
-    const updated = [...boards, newBoard];
-    saveBoards(updated);
+    fetchBoards();
+  }, []);
 
-    setName("");
+  const createBoard = async () => {
+    if (!name.trim()) return;
+
+    try {
+      const res = await axiosClient.post("/boards", {
+        name,
+      });
+
+      setBoards((prev) => [...prev, res.data]);
+      setName("");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

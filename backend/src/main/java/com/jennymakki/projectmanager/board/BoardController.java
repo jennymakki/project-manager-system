@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +37,8 @@ public class BoardController {
                         @RequestBody CreateBoardRequest request,
                         Authentication authentication) {
 
-                String email = authentication.getName();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -49,7 +51,8 @@ public class BoardController {
         @GetMapping("/boards")
         public List<BoardDto> getBoards(Authentication authentication) {
 
-                String email = authentication.getName();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -65,7 +68,8 @@ public class BoardController {
                         @PathVariable Long id,
                         Authentication authentication) {
 
-                String email = authentication.getName();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -81,7 +85,8 @@ public class BoardController {
                         @RequestBody CreateBoardRequest request,
                         Authentication authentication) {
 
-                String email = authentication.getName();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -97,7 +102,8 @@ public class BoardController {
                         @PathVariable Long id,
                         Authentication authentication) {
 
-                String email = authentication.getName();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));

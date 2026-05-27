@@ -2,8 +2,10 @@ package com.jennymakki.projectmanager.board;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jennymakki.projectmanager.user.User;
 
@@ -30,12 +32,12 @@ public class BoardService {
     public Board getBoardById(Long id, User user) {
 
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found"));
 
         User owner = board.getOwner();
 
         if (owner == null || !owner.getId().equals(user.getId())) {
-            throw new org.springframework.security.access.AccessDeniedException("Not owner");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not owner");
         }
 
         return board;

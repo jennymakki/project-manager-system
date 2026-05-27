@@ -1,11 +1,12 @@
 package com.jennymakki.projectmanager.security;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,9 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
-    public JwtFilter(JwtService jwtService) {
+    public JwtFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-
+        System.out.println("AUTH HEADER: " + request.getHeader("Authorization"));
         if (!enabled) {
             filterChain.doFilter(request, response);
             return;
@@ -55,10 +58,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String email = jwtService.extractEmail(token);
 
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    email,
+                    userDetails,
                     null,
-                    Collections.emptyList());
+                    userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
