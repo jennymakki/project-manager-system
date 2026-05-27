@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.jennymakki.projectmanager.list.TaskListRepository;
 import com.jennymakki.projectmanager.user.User;
 import com.jennymakki.projectmanager.user.UserRepository;
 
@@ -20,11 +21,14 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
 
     @Autowired
+    private TaskListRepository taskListRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        boardService = new BoardService(boardRepository);
+        boardService = new BoardService(boardRepository, taskListRepository);
     }
 
     @Test
