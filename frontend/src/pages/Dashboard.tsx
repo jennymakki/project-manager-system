@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+
 import BoardCard from "../app/components/blocks/board/BoardCard";
+import { Input } from "../app/components/ui/input";
+import { Button } from "../app/components/ui/button";
 
 import type { Board } from "../types/board";
 import { getBoards, createBoard } from "../features/boards/api/boardsAPI";
@@ -30,19 +33,15 @@ export default function Dashboard() {
       <h1 className="text-2xl font-bold mb-4">Your Boards</h1>
 
       <div className="flex gap-2 mb-4">
-        <input
+        <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border p-2 rounded"
           placeholder="Board name..."
         />
 
-        <button
-          onClick={handleCreate}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
+        <Button onClick={handleCreate}>
           Create
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
