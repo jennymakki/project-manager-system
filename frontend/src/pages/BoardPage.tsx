@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import axiosClient from "../lib/api/axiosClient";
 import ListColumn from "../app/components/blocks/list/ListColumn";
 
 import type { Board } from "../types/board";
 import type { List } from "../types/list";
+
+import { getBoard, getBoardLists } from "../features/boards/api/boardsAPI";
 
 export default function BoardPage() {
   const { id } = useParams<{ id: string }>();
@@ -14,36 +15,24 @@ export default function BoardPage() {
   const [lists, setLists] = useState<List[]>([]);
 
   useEffect(() => {
-    const fetchBoardData = async () => {
-      try {
-        const boardRes = await axiosClient.get<Board>(`/boards/${id}`);
-        const listsRes = await axiosClient.get<List[]>(`/boards/${id}/lists`);
+    const fetch = async () => {
+      if (!id) return;
 
-        setBoard(boardRes.data);
-        setLists(listsRes.data);
-      } catch (err) {
-        console.error(err);
-      }
+      const boardRes = await getBoard(id);
+      const listsRes = await getBoardLists(id);
+
+      setBoard(boardRes.data);
+      setLists(listsRes.data);
     };
 
-    if (id) {
-      fetchBoardData();
-    }
+    fetch();
   }, [id]);
 
-  if (!board) {
-    return (
-      <div className="p-6 text-gray-500">
-        Loading board...
-      </div>
-    );
-  }
+  if (!board) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        {board.name}
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">{board.name}</h1>
 
       <div className="flex gap-4 overflow-x-auto">
         {lists.map((list) => (

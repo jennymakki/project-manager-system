@@ -1,0 +1,1 @@
+// Todo: Global auth-state instead of each page doing localStorage.getItem("token")

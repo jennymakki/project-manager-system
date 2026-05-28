@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
 import BoardCard from "../app/components/blocks/board/BoardCard";
-import axiosClient from "../lib/api/axiosClient";
 
 import type { Board } from "../types/board";
+import { getBoards, createBoard } from "../features/boards/api/boardsAPI";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
@@ -11,37 +10,24 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchBoards = async () => {
-      try {
-        const res = await axiosClient.get<Board[]>("/boards");
-        setBoards(res.data);
-      } catch (err) {
-        console.error(err);
-      }
+      const res = await getBoards();
+      setBoards(res.data);
     };
 
     fetchBoards();
   }, []);
 
-  const createBoard = async () => {
+  const handleCreate = async () => {
     if (!name.trim()) return;
 
-    try {
-      const res = await axiosClient.post<Board>("/boards", {
-        name,
-      });
-
-      setBoards((prev) => [...prev, res.data]);
-      setName("");
-    } catch (err) {
-      console.error(err);
-    }
+    const res = await createBoard(name);
+    setBoards((prev) => [...prev, res.data]);
+    setName("");
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Your Boards
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Your Boards</h1>
 
       <div className="flex gap-2 mb-4">
         <input
@@ -52,7 +38,7 @@ export default function Dashboard() {
         />
 
         <button
-          onClick={createBoard}
+          onClick={handleCreate}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           Create

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { register, login } from "../features/auth/api/api";
+import { register, login } from "../features/auth/api/authApi";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -12,47 +12,34 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await register(email, password);
+    await register(email, password);
 
-      const loginRes = await login(email, password);
+    const res = await login(email, password);
 
-      localStorage.setItem("token", loginRes.data.token);
+    localStorage.setItem("token", res.data.token);
 
-      alert("User created!");
-
-      navigate("/dashboard", { replace: true });
-    } catch (error) {
-      console.error(error);
-      alert("Registration failed");
-    }
+    navigate("/dashboard", { replace: true });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <h1>Register</h1>
       <form onSubmit={handleRegister} className="flex flex-col gap-4 w-80">
-        <h1 className="text-2xl font-bold">Register</h1>
-
         <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 rounded"
+          placeholder="email"
         />
 
         <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 rounded"
+          placeholder="password"
         />
 
-        <button
-          type="submit"
-          className="bg-black text-white p-2 rounded"
-        >
+        <button className="bg-black text-white p-2 rounded">
           Register
         </button>
       </form>

@@ -1,4 +1,4 @@
-import axiosClient from "../../../lib/api/axiosClient.js"
+import axiosClient from "../../../lib/api/axiosClient";
 
 export const register = (email: string, password: string) =>
   axiosClient.post("/auth/register", { email, password });
