@@ -30,6 +30,8 @@ public class BoardService {
 
     public Board createBoard(String name, User owner) {
 
+        System.out.println("CREATING DEFAULT LISTS");
+
         Board board = new Board(name, owner);
 
         Board savedBoard = boardRepository.save(board);
