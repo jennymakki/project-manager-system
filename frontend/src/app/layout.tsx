@@ -1,15 +1,10 @@
-import "../design-system/theme-provider";
 import { AppShell } from "./components/layout/app-shell";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout() {
   return (
     <html lang="en">
       <body>
-        <AppShell>{children}</AppShell>
+        <AppShell />
       </body>
     </html>
   );

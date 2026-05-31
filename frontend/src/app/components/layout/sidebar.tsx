@@ -1,13 +1,63 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { createTheme } from "../../../design-system/tokens";
+
+const theme = createTheme("light");
 
 export function Sidebar() {
-  return (
-    <aside className="w-64 border-r p-4">
-      <div className="mb-6 font-bold">Project Manager</div>
+  const location = useLocation();
 
-      <nav className="flex flex-col gap-2">
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/board/123">Board</Link>
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <aside
+      style={{
+        width: 256,
+        padding: theme.spacing.md,
+        borderRight: `1px solid ${theme.colors.border}`,
+        background: theme.colors.background,
+      }}
+    >
+      <div
+        style={{
+          marginBottom: theme.spacing.lg,
+          fontSize: theme.typography.fontSize.lg,
+          fontFamily: theme.typography.fontFamily.bold,
+          color: theme.colors.text,
+        }}
+      >
+        Project Manager
+      </div>
+
+      <nav style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
+        <Link
+          to="/dashboard"
+          style={{
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.sm,
+            textDecoration: "none",
+            background: isActive("/dashboard") ? theme.colors.primary : "transparent",
+            color: isActive("/dashboard")
+              ? "#fff"
+              : theme.colors.textSecondary,
+          }}
+        >
+          Dashboard
+        </Link>
+
+        <Link
+          to="/board/123"
+          style={{
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.sm,
+            textDecoration: "none",
+            background: isActive("/board/123") ? theme.colors.primary : "transparent",
+            color: isActive("/board/123")
+              ? "#fff"
+              : theme.colors.textSecondary,
+          }}
+        >
+          Board
+        </Link>
       </nav>
     </aside>
   );
