@@ -8,9 +8,9 @@ import {
 import { createTheme } from "./tokens";
 
 type ThemeMode =
-  | "light"
+  | "blue"
   | "dark"
-  | "pastel";
+  | "purple";
 
 const ThemeContext = createContext<any>(null);
 
@@ -20,7 +20,7 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const [mode, setMode] =
-    useState<ThemeMode>("light");
+    useState<ThemeMode>("blue");
 
   const theme = useMemo(
     () => createTheme(mode),

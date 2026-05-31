@@ -4,9 +4,16 @@ import TaskCard from "../task/task-card";
 import type { List } from "../../../../types/list";
 import type { Task } from "../../../../types/task";
 
+import { useTheme } from "../../../../design-system/theme-provider";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
+import { Card } from "../../ui/card";
+
 export default function ListColumn({ list }: { list: List }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState("");
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -30,24 +37,39 @@ export default function ListColumn({ list }: { list: List }) {
   };
 
   return (
-    <div className="w-72 bg-gray-100 p-3 rounded">
-      <h3 className="font-bold mb-2">{list.name}</h3>
+    <Card
+      style={{
+        width: 288,
+        display: "flex",
+        flexDirection: "column",
+        gap: theme.spacing.sm,
+      }}
+    >
+      <h3
+        style={{
+          fontSize: theme.typography.fontSize.md,
+          fontFamily: theme.typography.fontFamily.bold,
+          color: theme.colors.text,
+        }}
+      >
+        {list.name}
+      </h3>
 
-      <div className="flex gap-2 mb-3">
-        <input
+      <div style={{ display: "flex", gap: theme.spacing.sm }}>
+        <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="flex-1 p-1 border rounded"
+          placeholder="New task..."
         />
 
-        <button onClick={createTask}>+</button>
+        <Button onClick={createTask}>+</Button>
       </div>
 
-      <div className="space-y-2">
+      <div style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
       </div>
-    </div>
+    </Card>
   );
 }

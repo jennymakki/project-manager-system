@@ -4,7 +4,7 @@ import { shadows } from "./shadows";
 import { typography } from "./typography";
 
 export const createTheme = (
-  mode: "light" | "dark" | "pastel"
+  mode: "blue" | "dark" | "purple"
 ) => ({
   colors: colors[mode],
   spacing,

@@ -1,50 +1,52 @@
 export const colors = {
-  light: {
-    primary: "#6D5DFC",
-    primaryHover: "#5B4AF7",
+  blue: {
+    primary: "#2563EB",
+    primaryHover: "#1D4ED8",
 
-    background: "#F8F9FC",
+    background: "#F6F7FB",
+    surface: "#FFFFFF",
+
+    text: "#0F172A",
+    textSecondary: "#64748B",
+
+    border: "#E2E8F0",
+
+    success: "#16A34A",
+    warning: "#F59E0B",
+    danger: "#EF4444",
+  },
+
+  dark: {
+    primary: "#60A5FA",
+    primaryHover: "#3B82F6",
+
+    background: "#0B1220",
+    surface: "#111827",
+
+    text: "#E5E7EB",
+    textSecondary: "#94A3B8",
+
+    border: "#1F2937",
+
+    success: "#22C55E",
+    warning: "#FBBF24",
+    danger: "#F87171",
+  },
+
+  purple: {
+    primary: "#8B5CF6",
+    primaryHover: "#7C3AED",
+
+    background: "#FAFAFF",
     surface: "#FFFFFF",
 
     text: "#1F2937",
     textSecondary: "#6B7280",
 
-    border: "#E5E7EB",
+    border: "#E9E5FF",
 
-    success: "#4CAF50",
-    warning: "#FFC107",
-    danger: "#EF4444",
-  },
-
-  dark: {
-    primary: "#7C6DFF",
-
-    background: "#121212",
-    surface: "#1E1E1E",
-
-    text: "#FFFFFF",
-    textSecondary: "#A1A1AA",
-
-    border: "#2A2A2A",
-
-    success: "#66BB6A",
-    warning: "#FFD54F",
-    danger: "#FF6B6B",
-  },
-
-  pastel: {
-    primary: "#A78BFA",
-
-    background: "#FFF8FA",
-    surface: "#FFFFFF",
-
-    text: "#374151",
-    textSecondary: "#9CA3AF",
-
-    border: "#F3E8FF",
-
-    success: "#A7F3D0",
-    warning: "#FDE68A",
-    danger: "#FCA5A5",
+    success: "#34D399",
+    warning: "#FBBF24",
+    danger: "#FB7185",
   },
 };

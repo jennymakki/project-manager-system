@@ -9,15 +9,15 @@ export default function ThemeToggle() {
       onChange={(e) =>
         setMode(
           e.target.value as
-            | "light"
+            | "blue"
             | "dark"
-            | "pastel"
+            | "purple"
         )
       }
     >
-      <option value="light">Light</option>
+      <option value="blue">Blue</option>
       <option value="dark">Dark</option>
-      <option value="pastel">Pastel</option>
+      <option value="purple">Purple</option>
     </select>
   );
 }

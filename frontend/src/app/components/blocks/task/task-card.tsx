@@ -3,9 +3,16 @@ import axiosClient from "../../../../lib/api/axiosClient.js";
 import type { Task } from "../../../../types/task.js";
 import type { Comment } from "../../../../types/comment.js";
 
+import { useTheme } from "../../../../design-system/theme-provider";
+import { Input } from "../../ui/input.js";
+import { Button } from "../../ui/button.js";
+import { Card } from "../../ui/card.js";
+
 export default function TaskCard({ task }: { task: Task }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -28,25 +35,50 @@ export default function TaskCard({ task }: { task: Task }) {
   };
 
   return (
-    <div className="bg-white p-2 rounded shadow">
-      <p className="font-medium">{task.title}</p>
+    <Card
+      style={{
+        padding: theme.spacing.sm,
+        display: "flex",
+        flexDirection: "column",
+        gap: theme.spacing.sm,
+      }}
+    >
+      <div
+        style={{
+          fontFamily: theme.typography.fontFamily.medium,
+          color: theme.colors.text,
+        }}
+      >
+        {task.title}
+      </div>
 
-      <div className="mt-2 space-y-1">
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {comments.map((c) => (
-          <div key={c.id} className="text-xs bg-gray-50 p-1 rounded">
+          <div
+            key={c.id}
+            style={{
+              fontSize: theme.typography.fontSize.xs,
+              background: theme.colors.background,
+              padding: theme.spacing.xs,
+              borderRadius: theme.radius.sm,
+              color: theme.colors.textSecondary,
+            }}
+          >
             <div>{c.content}</div>
-            <div className="text-gray-400">{c.author}</div>
+            <div>{c.author}</div>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1 mt-2">
-        <input
+      <div style={{ display: "flex", gap: theme.spacing.sm }}>
+        <Input
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          placeholder="Write comment..."
         />
-        <button onClick={createComment}>+</button>
+
+        <Button onClick={createComment}>+</Button>
       </div>
-    </div>
+    </Card>
   );
 }

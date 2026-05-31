@@ -10,38 +10,19 @@ export function Header() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: `0 ${theme.spacing.md}px`,
+        padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
         borderBottom: `1px solid ${theme.colors.border}`,
         background: theme.colors.surface,
       }}
     >
-      {/* Left */}
       <div
         style={{
           fontSize: theme.typography.fontSize.md,
-          fontFamily: theme.typography.fontFamily.semibold,
+          fontWeight: 600,
           color: theme.colors.text,
         }}
       >
         Dashboard
-      </div>
-
-      {/* Right */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: theme.spacing.sm,
-        }}
-      >
-        <div
-          style={{
-            fontSize: theme.typography.fontSize.sm,
-            color: theme.colors.textSecondary,
-          }}
-        >
-          user@email.com
-        </div>
       </div>
     </header>
   );

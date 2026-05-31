@@ -22,8 +22,9 @@ export function Sidebar() {
         style={{
           marginBottom: theme.spacing.lg,
           fontSize: theme.typography.fontSize.lg,
-          fontFamily: theme.typography.fontFamily.bold,
-          color: theme.colors.text,
+          fontWeight: 700,
+          color: theme.colors.textSecondary,
+          letterSpacing: "-0.02em",
         }}
       >
         Project Manager
@@ -45,9 +46,7 @@ export function Sidebar() {
             background: isActive("/dashboard")
               ? theme.colors.primary
               : "transparent",
-            color: isActive("/dashboard")
-              ? "#fff"
-              : theme.colors.textSecondary,
+            color: isActive("/dashboard") ? "#fff" : theme.colors.textSecondary,
           }}
         >
           Dashboard
