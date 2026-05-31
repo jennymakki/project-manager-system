@@ -1,6 +1,18 @@
+import { useTheme } from "../../../design-system/theme-provider";
+
 export function Card({ children }: { children: React.ReactNode }) {
+  const { theme } = useTheme();
+
   return (
-    <div className="border rounded-lg p-4 shadow-sm">
+    <div
+      style={{
+        background: theme.colors.surface,
+        border: `1px solid ${theme.colors.border}`,
+        borderRadius: theme.radius.md,
+        padding: theme.spacing.md,
+        boxShadow: theme.shadows.card,
+      }}
+    >
       {children}
     </div>
   );
