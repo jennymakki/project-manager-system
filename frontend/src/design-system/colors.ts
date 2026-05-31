@@ -34,18 +34,35 @@ export const colors = {
   },
 
   purple: {
-    primary: "#8B5CF6",
-    primaryHover: "#7C3AED",
+    primary: "#14B8A6",
+    primaryHover: "#0D9488",
 
-    background: "#FAFAFF",
+    background: "#F7FAFA",
+    surface: "#FFFFFF",
+
+    text: "#0F172A",
+    textSecondary: "#64748B",
+
+    border: "#E2E8E8",
+
+    success: "#10B981",
+    warning: "#F59E0B",
+    danger: "#EF4444",
+  },
+
+  playful: {
+    primary: "#F472B6",
+    primaryHover: "#EC4899",
+
+    background: "#FFF7FB",
     surface: "#FFFFFF",
 
     text: "#1F2937",
     textSecondary: "#6B7280",
 
-    border: "#E9E5FF",
+    border: "#FCE7F3",
 
-    success: "#34D399",
+    success: "#22C55E",
     warning: "#FBBF24",
     danger: "#FB7185",
   },

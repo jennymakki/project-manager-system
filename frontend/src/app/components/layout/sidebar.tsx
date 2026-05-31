@@ -16,62 +16,90 @@ export function Sidebar() {
         padding: theme.spacing.md,
         borderRight: `1px solid ${theme.colors.border}`,
         background: theme.colors.background,
+        display: "flex",
+        flexDirection: "column",
+        gap: theme.spacing.lg,
       }}
     >
       <div
         style={{
-          marginBottom: theme.spacing.lg,
           fontSize: theme.typography.fontSize.lg,
           fontWeight: 700,
-          color: theme.colors.textSecondary,
+          color: theme.colors.text,
           letterSpacing: "-0.02em",
         }}
       >
         Project Manager
       </div>
 
-      <nav
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: theme.spacing.sm,
-        }}
-      >
-        <Link
-          to="/dashboard"
+      <div>
+        <div
           style={{
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.sm,
-            textDecoration: "none",
-            background: isActive("/dashboard")
-              ? theme.colors.primary
-              : "transparent",
-            color: isActive("/dashboard") ? "#fff" : theme.colors.textSecondary,
+            fontSize: theme.typography.fontSize.sm,
+            fontWeight: 600,
+            color: theme.colors.textSecondary,
+            marginBottom: theme.spacing.sm,
           }}
         >
-          Dashboard
-        </Link>
+          Navigation
+        </div>
 
-        {boards.map((board) => (
+        <nav style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
           <Link
-            key={board.id}
-            to={`/boards/${board.id}`}
+            to="/dashboard"
             style={{
               padding: theme.spacing.sm,
               borderRadius: theme.radius.sm,
               textDecoration: "none",
-              background: isActive(`/boards/${board.id}`)
+              background: isActive("/dashboard")
                 ? theme.colors.primary
                 : "transparent",
-              color: isActive(`/boards/${board.id}`)
+              color: isActive("/dashboard")
                 ? "#fff"
                 : theme.colors.textSecondary,
+              fontWeight: isActive("/dashboard") ? 600 : 400,
             }}
           >
-            {board.name}
+            Dashboard
           </Link>
-        ))}
-      </nav>
+        </nav>
+      </div>
+
+      <div>
+        <div
+          style={{
+            fontSize: theme.typography.fontSize.sm,
+            fontWeight: 600,
+            color: theme.colors.textSecondary,
+            marginBottom: theme.spacing.sm,
+          }}
+        >
+          My Boards
+        </div>
+
+        <nav style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
+          {boards.map((board) => (
+            <Link
+              key={board.id}
+              to={`/boards/${board.id}`}
+              style={{
+                padding: theme.spacing.sm,
+                borderRadius: theme.radius.sm,
+                textDecoration: "none",
+                background: isActive(`/boards/${board.id}`)
+                  ? theme.colors.primary
+                  : "transparent",
+                color: isActive(`/boards/${board.id}`)
+                  ? "#fff"
+                  : theme.colors.textSecondary,
+                fontWeight: isActive(`/boards/${board.id}`) ? 600 : 400,
+              }}
+            >
+              {board.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </aside>
   );
 }
