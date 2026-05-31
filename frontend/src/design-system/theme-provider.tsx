@@ -10,7 +10,8 @@ import { createTheme } from "./tokens";
 type ThemeMode =
   | "blue"
   | "dark"
-  | "purple";
+  | "purple"
+  | "playful";
 
 const ThemeContext = createContext<any>(null);
 

@@ -48,7 +48,7 @@ export default function ListColumn({ list }: { list: List }) {
       <h3
         style={{
           fontSize: theme.typography.fontSize.md,
-          fontFamily: theme.typography.fontFamily.bold,
+          fontWeight: 500,
           color: theme.colors.text,
         }}
       >
@@ -65,7 +65,13 @@ export default function ListColumn({ list }: { list: List }) {
         <Button onClick={createTask}>+</Button>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: theme.spacing.sm,
+        }}
+      >
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}

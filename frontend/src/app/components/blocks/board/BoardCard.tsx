@@ -2,11 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../../../design-system/theme-provider";
 import type { Board } from "../../../../types/board";
 
-export default function BoardCard({
-  board,
-}: {
-  board: Board;
-}) {
+export default function BoardCard({ board }: { board: Board }) {
   const navigate = useNavigate();
   const { theme } = useTheme();
 
@@ -25,7 +21,7 @@ export default function BoardCard({
         style={{
           color: theme.colors.text,
           fontSize: theme.typography.fontSize.lg,
-          fontFamily: theme.typography.fontFamily.semibold,
+          fontWeight: 600,
         }}
       >
         {board.name}

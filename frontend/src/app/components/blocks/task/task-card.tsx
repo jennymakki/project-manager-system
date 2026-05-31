@@ -45,7 +45,7 @@ export default function TaskCard({ task }: { task: Task }) {
     >
       <div
         style={{
-          fontFamily: theme.typography.fontFamily.medium,
+          fontWeight: 500,
           color: theme.colors.text,
         }}
       >
@@ -55,12 +55,9 @@ export default function TaskCard({ task }: { task: Task }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {comments.map((c) => (
           <div
-            key={c.id}
             style={{
               fontSize: theme.typography.fontSize.xs,
-              background: theme.colors.background,
-              padding: theme.spacing.xs,
-              borderRadius: theme.radius.sm,
+              fontWeight: 400,
               color: theme.colors.textSecondary,
             }}
           >
