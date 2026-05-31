@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { register, login } from "../features/auth/api/authApi";
+import { Button } from "../app/components/ui/button";
+import { Input } from "../app/components/ui/input";
+import { Card } from "../app/components/ui/card";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -22,27 +25,37 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1>Register</h1>
-      <form onSubmit={handleRegister} className="flex flex-col gap-4 w-80">
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-          placeholder="email"
-        />
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card>
+        <h1 style={{ marginBottom: 16 }}>Register</h1>
 
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 rounded"
-          placeholder="password"
-        />
+        <form
+          onSubmit={handleRegister}
+          style={{ display: "flex", flexDirection: "column", gap: 12, width: 320 }}
+        >
+          <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email"
+          />
 
-        <button className="bg-black text-white p-2 rounded">
-          Register
-        </button>
-      </form>
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+          />
+
+          <Button type="submit">Register</Button>
+        </form>
+      </Card>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import BoardCard from "../app/components/blocks/board/BoardCard";
 import { Input } from "../app/components/ui/input";
+import { Card } from "../app/components/ui/card";
 import { Button } from "../app/components/ui/button";
 
 import type { Board } from "../types/board";
@@ -29,22 +30,31 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Your Boards</h1>
+    <div style={{ padding: 24 }}>
+      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>
+        Your Boards
+      </h1>
 
-      <div className="flex gap-2 mb-4">
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Board name..."
-        />
+      <Card>
+        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Board name..."
+          />
 
-        <Button onClick={handleCreate}>
-          Create
-        </Button>
-      </div>
+          <Button onClick={handleCreate}>Create</Button>
+        </div>
+      </Card>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 16,
+          marginTop: 16,
+        }}
+      >
         {boards.map((board) => (
           <BoardCard key={board.id} board={board} />
         ))}

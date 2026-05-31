@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import ListColumn from "../app/components/blocks/list/ListColumn";
+import { Card } from "../app/components/ui/card";
 
 import type { Board } from "../types/board";
 import type { List } from "../types/list";
@@ -31,10 +32,21 @@ export default function BoardPage() {
   if (!board) return <div>Loading...</div>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">{board.name}</h1>
+    <div style={{ padding: 24 }}>
+      <Card>
+        <h1 style={{ fontSize: 24, fontWeight: 700 }}>
+          {board.name}
+        </h1>
+      </Card>
 
-      <div className="flex gap-4 overflow-x-auto">
+      <div
+        style={{
+          display: "flex",
+          gap: 16,
+          overflowX: "auto",
+          marginTop: 16,
+        }}
+      >
         {lists.map((list) => (
           <ListColumn key={list.id} list={list} />
         ))}
