@@ -1,11 +1,17 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import ThemeToggle from "../ui/ThemeToggle";
+
 import { useTheme } from "../../../design-system/theme-provider";
+import { useBreakpoint } from "../../../design-system/hooks/useBreakpoint";
+
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
 export function AppShell() {
   const { theme } = useTheme();
+  const { isMobile } = useBreakpoint();
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div
@@ -16,19 +22,40 @@ export function AppShell() {
         color: theme.colors.text,
       }}
     >
-      <aside>
-        <Sidebar />
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.4)",
+            zIndex: 999,
+          }}
+        />
+      )}
 
-        <ThemeToggle />
-      </aside>
+      <Sidebar
+        open={isMobile ? sidebarOpen : true}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Header />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+        }}
+      >
+        <Header
+          onMenuClick={() => setSidebarOpen(true)}
+        />
+
         <main
           style={{
             flex: 1,
-            padding: theme.spacing.lg,
             overflow: "auto",
+            padding: theme.spacing.lg,
           }}
         >
           <Outlet />

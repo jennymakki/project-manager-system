@@ -4,14 +4,14 @@ import BoardCard from "../app/components/blocks/board/BoardCard";
 import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
 import { Button } from "../app/components/ui/button";
-
+import { useBreakpoint } from "../design-system/hooks/useBreakpoint";
 import { useBoards } from "../features/boards/state/BoardsContext";
-import type { Board } from "../types/board";
 import { getBoards, createBoard } from "../features/boards/api/boardsAPI";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
-const { boards, setBoards } = useBoards();
+  const { boards, setBoards } = useBoards();
+  const { isMobile } = useBreakpoint();
 
   useEffect(() => {
     const fetchBoards = async () => {
@@ -31,13 +31,20 @@ const { boards, setBoards } = useBoards();
   };
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: isMobile ? 16 : 24,}}>
       <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>
         Your Boards
       </h1>
 
       <Card>
-        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            gap: 8,
+            marginBottom: 16,
+          }}
+        >
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -51,7 +58,7 @@ const { boards, setBoards } = useBoards();
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: 16,
           marginTop: 16,
         }}

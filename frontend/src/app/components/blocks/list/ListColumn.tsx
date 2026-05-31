@@ -3,7 +3,7 @@ import axiosClient from "../../../../lib/api/axiosClient";
 import TaskCard from "../task/task-card";
 import type { List } from "../../../../types/list";
 import type { Task } from "../../../../types/task";
-
+import { useBreakpoint } from "../../../../design-system/hooks/useBreakpoint";
 import { useTheme } from "../../../../design-system/theme-provider";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
@@ -14,6 +14,7 @@ export default function ListColumn({ list }: { list: List }) {
   const [title, setTitle] = useState("");
 
   const { theme } = useTheme();
+  const { isMobile } = useBreakpoint();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -39,10 +40,11 @@ export default function ListColumn({ list }: { list: List }) {
   return (
     <Card
       style={{
-        width: 288,
+        width: isMobile ? "100%" : 288,
         display: "flex",
         flexDirection: "column",
         gap: theme.spacing.sm,
+        flexShrink: 0,
       }}
     >
       <h3

@@ -1,7 +1,13 @@
 import { useTheme } from "../../../design-system/theme-provider";
+import { useBreakpoint } from "../../../design-system/hooks/useBreakpoint";
 
-export function Header() {
+type HeaderProps = {
+  onMenuClick: () => void;
+};
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { theme } = useTheme();
+  const { isMobile } = useBreakpoint();
 
   return (
     <header
@@ -9,21 +15,26 @@ export function Header() {
         height: 56,
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
+        gap: theme.spacing.md,
+        padding: `0 ${theme.spacing.md}px`,
         borderBottom: `1px solid ${theme.colors.border}`,
         background: theme.colors.surface,
       }}
     >
-      <div
-        style={{
-          fontSize: theme.typography.fontSize.md,
-          fontWeight: 600,
-          color: theme.colors.text,
-        }}
-      >
-        Dashboard
-      </div>
+      {isMobile && (
+        <button
+          onClick={onMenuClick}
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            fontSize: 20,
+            color: theme.colors.text,
+          }}
+        >
+          ☰
+        </button>
+      )}
     </header>
   );
 }

@@ -2,6 +2,7 @@ import { colors } from "./colors";
 import { spacing } from "./spacing";
 import { shadows } from "./shadows";
 import { typography } from "./typography";
+import { breakpoints } from "./breakpoints";
 
 export const createTheme = (
   mode: "blue" | "dark" | "purple" | "playful"
@@ -10,6 +11,7 @@ export const createTheme = (
   spacing,
   shadows,
   typography,
+  breakpoints,
 
   radius: {
     sm: 8,
