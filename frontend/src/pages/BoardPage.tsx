@@ -44,7 +44,6 @@ export default function BoardPage() {
         boxSizing: "border-box",
       }}
     >
-      {" "}
       <Card>
         <h1 style={{ fontSize: 24, fontWeight: 700 }}>{board.name}</h1>
       </Card>

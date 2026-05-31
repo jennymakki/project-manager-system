@@ -1,27 +1,35 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { register, login } from "../features/auth/api/authApi";
 import { Button } from "../app/components/ui/button";
 import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
+import { useTheme } from "../design-system/theme-provider";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await register(email, password);
+    try {
+      setLoading(true);
 
-    const res = await login(email, password);
+      await register(email, password);
 
-    localStorage.setItem("token", res.data.token);
+      const res = await login(email, password);
+      localStorage.setItem("token", res.data.token);
 
-    navigate("/dashboard", { replace: true });
+      navigate("/dashboard", { replace: true });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,14 +39,27 @@ export default function Register() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        background: theme.colors.background,
+        color: theme.colors.text,
       }}
     >
-      <Card>
+      <Card
+        style={{
+          padding: 24,
+          background: theme.colors.surface,
+          color: theme.colors.text,
+        }}
+      >
         <h1 style={{ marginBottom: 16 }}>Register</h1>
 
         <form
           onSubmit={handleRegister}
-          style={{ display: "flex", flexDirection: "column", gap: 12, width: 320 }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            width: 320,
+          }}
         >
           <Input
             value={email}
@@ -53,7 +74,16 @@ export default function Register() {
             placeholder="password"
           />
 
-          <Button type="submit">Register</Button>
+          <Button loading={loading} type="submit">
+            Register
+          </Button>
+
+          <Link
+            to="/login"
+            style={{ color: theme.colors.primary, fontSize: 14 }}
+          >
+            Already have an account?
+          </Link>
         </form>
       </Card>
     </div>

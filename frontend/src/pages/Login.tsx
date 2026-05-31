@@ -5,21 +5,29 @@ import { login } from "../features/auth/api/authApi";
 import { Button } from "../app/components/ui/button";
 import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
+import { useTheme } from "../design-system/theme-provider";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const res = await login(email, password);
+    try {
+      setLoading(true);
 
-    localStorage.setItem("token", res.data.token);
+      const res = await login(email, password);
+      localStorage.setItem("token", res.data.token);
 
-    navigate("/dashboard");
+      navigate("/dashboard");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,9 +37,17 @@ export default function Login() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        background: theme.colors.background,
+        color: theme.colors.text,
       }}
     >
-      <Card>
+      <Card
+        style={{
+          padding: 24,
+          background: theme.colors.surface,
+          color: theme.colors.text,
+        }}
+      >
         <h1 style={{ marginBottom: 16 }}>Login</h1>
 
         <form
@@ -56,9 +72,16 @@ export default function Login() {
             placeholder="password"
           />
 
-          <Button type="submit">Login</Button>
+          <Button loading={loading} type="submit">
+            Login
+          </Button>
 
-          <Link to="/register">Register</Link>
+          <Link
+            to="/register"
+            style={{ color: theme.colors.primary, fontSize: 14 }}
+          >
+            Register
+          </Link>
         </form>
       </Card>
     </div>

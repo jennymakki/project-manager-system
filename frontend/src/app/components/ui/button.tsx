@@ -1,27 +1,38 @@
+import { useState } from "react";
 import { useTheme } from "../../../design-system/theme-provider";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  loading?: boolean;
+};
 
-export function Button({ children, style, ...props }: ButtonProps) {
+export function Button({
+  children,
+  loading,
+  disabled,
+  style,
+  ...props
+}: ButtonProps) {
   const { theme } = useTheme();
 
   return (
     <button
       {...props}
+      disabled={loading || disabled}
       style={{
         padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
         borderRadius: theme.radius.sm,
-        background: theme.colors.primary,
+        background: loading ? theme.colors.textSecondary : theme.colors.primary,
         color: "#fff",
         border: "none",
-        cursor: "pointer",
-        fontSize: theme.typography.fontSize.sm,
-        fontFamily: theme.typography.fontFamily.medium,
+        cursor: loading ? "not-allowed" : "pointer",
+        fontSize: theme.typography.fontSize.md,
+        fontWeight: 500,
+        opacity: loading ? 0.7 : 1,
         transition: "all 0.2s ease",
         ...style,
       }}
     >
-      {children}
+      {loading ? "Loading..." : children}
     </button>
   );
 }
