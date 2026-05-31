@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import ThemeToggle from "../ui/ThemeToggle";
 import { useTheme } from "../../../design-system/theme-provider";
+import { Header } from "./header";
+import { Sidebar } from "./sidebar";
 
 export function AppShell() {
   const { theme } = useTheme();
@@ -14,32 +16,14 @@ export function AppShell() {
         color: theme.colors.text,
       }}
     >
-      <aside
-        style={{
-          width: 256,
-          borderRight: `1px solid ${theme.colors.border}`,
-          padding: theme.spacing.md,
-          background: theme.colors.surface,
-        }}
-      >
-        <div style={{ marginBottom: theme.spacing.md }}>
-          Sidebar
-        </div>
+      <aside>
+        <Sidebar />
 
         <ThemeToggle />
       </aside>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <header
-          style={{
-            height: 56,
-            borderBottom: `1px solid ${theme.colors.border}`,
-            padding: theme.spacing.md,
-          }}
-        >
-          Header
-        </header>
-
+        <Header />
         <main
           style={{
             flex: 1,

@@ -1,10 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { createTheme } from "../../../design-system/tokens";
-
-const theme = createTheme("light");
+import { useTheme } from "../../../design-system/theme-provider";
 
 export function Sidebar() {
   const location = useLocation();
+  const { theme } = useTheme();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -28,14 +27,22 @@ export function Sidebar() {
         Project Manager
       </div>
 
-      <nav style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
+      <nav
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: theme.spacing.sm,
+        }}
+      >
         <Link
           to="/dashboard"
           style={{
             padding: theme.spacing.sm,
             borderRadius: theme.radius.sm,
             textDecoration: "none",
-            background: isActive("/dashboard") ? theme.colors.primary : "transparent",
+            background: isActive("/dashboard")
+              ? theme.colors.primary
+              : "transparent",
             color: isActive("/dashboard")
               ? "#fff"
               : theme.colors.textSecondary,
@@ -50,7 +57,9 @@ export function Sidebar() {
             padding: theme.spacing.sm,
             borderRadius: theme.radius.sm,
             textDecoration: "none",
-            background: isActive("/board/123") ? theme.colors.primary : "transparent",
+            background: isActive("/board/123")
+              ? theme.colors.primary
+              : "transparent",
             color: isActive("/board/123")
               ? "#fff"
               : theme.colors.textSecondary,
