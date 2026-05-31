@@ -5,12 +5,13 @@ import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
 import { Button } from "../app/components/ui/button";
 
+import { useBoards } from "../features/boards/state/BoardsContext";
 import type { Board } from "../types/board";
 import { getBoards, createBoard } from "../features/boards/api/boardsAPI";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
-  const [boards, setBoards] = useState<Board[]>([]);
+const { boards, setBoards } = useBoards();
 
   useEffect(() => {
     const fetchBoards = async () => {

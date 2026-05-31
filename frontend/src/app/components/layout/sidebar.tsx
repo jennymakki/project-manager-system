@@ -1,9 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../../../design-system/theme-provider";
+import { useBoards } from "../../../features/boards/state/BoardsContext";
 
 export function Sidebar() {
   const location = useLocation();
   const { theme } = useTheme();
+  const { boards } = useBoards();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -51,22 +53,25 @@ export function Sidebar() {
           Dashboard
         </Link>
 
-        <Link
-          to="/board/123"
-          style={{
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.sm,
-            textDecoration: "none",
-            background: isActive("/board/123")
-              ? theme.colors.primary
-              : "transparent",
-            color: isActive("/board/123")
-              ? "#fff"
-              : theme.colors.textSecondary,
-          }}
-        >
-          Board
-        </Link>
+        {boards.map((board) => (
+          <Link
+            key={board.id}
+            to={`/boards/${board.id}`}
+            style={{
+              padding: theme.spacing.sm,
+              borderRadius: theme.radius.sm,
+              textDecoration: "none",
+              background: isActive(`/boards/${board.id}`)
+                ? theme.colors.primary
+                : "transparent",
+              color: isActive(`/boards/${board.id}`)
+                ? "#fff"
+                : theme.colors.textSecondary,
+            }}
+          >
+            {board.name}
+          </Link>
+        ))}
       </nav>
     </aside>
   );
