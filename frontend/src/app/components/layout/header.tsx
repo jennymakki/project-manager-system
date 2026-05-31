@@ -65,7 +65,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           fontWeight: 600,
         }}
       >
-        Logga ut
+        Log out
       </button>
     </header>
   );

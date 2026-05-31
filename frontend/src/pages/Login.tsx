@@ -39,51 +39,90 @@ export default function Login() {
         justifyContent: "center",
         background: theme.colors.background,
         color: theme.colors.text,
+        padding: 16,
       }}
     >
-      <Card
-        style={{
-          padding: 24,
-          background: theme.colors.surface,
-          color: theme.colors.text,
-        }}
-      >
-        <h1 style={{ marginBottom: 16 }}>Login</h1>
-
-        <form
-          onSubmit={handleLogin}
+      <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
+        
+        {/* Intro card */}
+        <Card
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
-            width: 320,
+            padding: 20,
+            background: theme.colors.surface,
+            color: theme.colors.text,
           }}
         >
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="email"
-          />
-
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
-          />
-
-          <Button loading={loading} type="submit">
-            Login
-          </Button>
-
-          <Link
-            to="/register"
-            style={{ color: theme.colors.primary, fontSize: 14 }}
+          <h2
+            style={{
+              fontSize: theme.typography.fontSize.lg,
+              fontWeight: 700,
+              marginBottom: 6,
+            }}
           >
-            Register
-          </Link>
-        </form>
-      </Card>
+            Welcome back
+          </h2>
+
+          <p
+            style={{
+              fontSize: theme.typography.fontSize.sm,
+              color: theme.colors.textSecondary,
+              lineHeight: 1.5,
+            }}
+          >
+            Sign in to manage your boards, tasks and collaborate with your team.
+          </p>
+        </Card>
+
+        {/* Login card */}
+        <Card
+          style={{
+            padding: 24,
+            background: theme.colors.surface,
+            color: theme.colors.text,
+          }}
+        >
+          <h1 style={{ marginBottom: 16, fontSize: 20, fontWeight: 700 }}>
+            Login
+          </h1>
+
+          <form
+            onSubmit={handleLogin}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          >
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email"
+            />
+
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+            />
+
+            <Button loading={loading} type="submit">
+              Login
+            </Button>
+
+            <Link
+              to="/register"
+              style={{
+                color: theme.colors.primary,
+                fontSize: 14,
+                textAlign: "center",
+              }}
+            >
+              Create account
+            </Link>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 }

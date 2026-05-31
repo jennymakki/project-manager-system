@@ -15,6 +15,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const { theme } = useTheme();
   const { boards } = useBoards();
   const { isMobile } = useBreakpoint();
+  const isDashboard = location.pathname === "/dashboard";
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -53,21 +54,24 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </button>
       )}
 
-      <Link
-        to="/dashboard"
-        onClick={() => isMobile && onClose()}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: theme.spacing.sm,
-          borderRadius: theme.radius.sm,
-          textDecoration: "none",
-        }}
-      >
-        <ArrowLeft size={18} />
-        <span>Back to Dashboard</span>
-      </Link>
+      {!isDashboard && (
+        <Link
+          to="/dashboard"
+          onClick={() => isMobile && onClose()}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.sm,
+            textDecoration: "none",
+            color: theme.colors.textSecondary,
+          }}
+        >
+          <ArrowLeft size={18} />
+          <span>Back to Dashboard</span>
+        </Link>
+      )}
 
       <div>
         <div
