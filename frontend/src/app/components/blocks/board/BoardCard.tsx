@@ -1,15 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import type { Board } from "../../../../types/board.js";
+import { useTheme } from "../../../../design-system/theme-provider";
+import type { Board } from "../../../../types/board";
 
-export default function BoardCard({ board }: { board: Board }) {
+export default function BoardCard({
+  board,
+}: {
+  board: Board;
+}) {
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   return (
     <div
-      className="p-4 bg-gray-100 rounded cursor-pointer hover:bg-gray-200"
       onClick={() => navigate(`/boards/${board.id}`)}
+      style={{
+        backgroundColor: theme.colors.surface,
+        borderRadius: theme.radius.md,
+        padding: theme.spacing.md,
+        boxShadow: theme.shadows.card,
+        cursor: "pointer",
+      }}
     >
-      <h2 className="font-semibold">{board.name}</h2>
+      <h2
+        style={{
+          color: theme.colors.text,
+          fontSize: theme.typography.fontSize.lg,
+          fontFamily: theme.typography.fontFamily.semibold,
+        }}
+      >
+        {board.name}
+      </h2>
     </div>
   );
 }

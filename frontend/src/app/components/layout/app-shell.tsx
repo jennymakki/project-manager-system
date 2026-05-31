@@ -1,10 +1,12 @@
 import { Outlet } from "react-router-dom";
+import ThemeToggle from "../ui/ThemeToggle";
 
 export function AppShell() {
   return (
     <div className="flex h-screen">
       <aside className="w-64 border-r">
         Sidebar
+        <ThemeToggle/>
       </aside>
 
       <div className="flex-1 flex flex-col">
