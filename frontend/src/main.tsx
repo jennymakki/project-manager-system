@@ -5,6 +5,7 @@ import { BoardsProvider } from "./features/boards/state/BoardsContext";
 
 import AppRoutes from "./app/router/AppRoutes";
 import "./index.css";
+import "./design-system/styles/animations.css";
 import { ThemeProvider } from "./design-system/theme-provider";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
