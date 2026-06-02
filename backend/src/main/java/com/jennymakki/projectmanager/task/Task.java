@@ -50,6 +50,10 @@ public class Task {
         this.assignedTo = assignedTo;
     }
 
+    public void setTaskList(TaskList taskList) {
+    this.taskList = taskList;
+}
+
     public LocalDateTime getDueDate() {
         return dueDate;
     }

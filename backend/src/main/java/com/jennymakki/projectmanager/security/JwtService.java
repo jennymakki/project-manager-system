@@ -1,7 +1,6 @@
 package com.jennymakki.projectmanager.security;
 
 import java.util.Date;
-import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
@@ -29,38 +28,31 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractEmail(String token) {
-        return extractClaim(token, Claims::getSubject);
+public boolean isTokenValid(String token) {
+    try {
+        Jwts.parser()
+            .verifyWith(key)
+            .build()
+            .parseSignedClaims(token);
+        return true;
+    } catch (Exception e) {
+        return false;
     }
+}
 
-    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        Claims claims = Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+public Claims extractAllClaims(String token) {
+    return Jwts.parser()
+        .verifyWith(key)
+        .build()
+        .parseSignedClaims(token)
+        .getPayload();
+}
 
-        return resolver.apply(claims);
-    }
+public String extractEmail(String token) {
+    return extractAllClaims(token).getSubject();
+}
 
-    public boolean isTokenValid(String token) {
-        try {
-            Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public Long extractUserId(String token) {
-        return extractClaim(token, claims -> claims.get("userId", Long.class));
-    }
-
-    public Long getUserIdFromToken(String token) {
-        return extractUserId(token);
-    }
-
+public Long extractUserId(String token) {
+    return extractAllClaims(token).get("userId", Long.class);
+}
 }

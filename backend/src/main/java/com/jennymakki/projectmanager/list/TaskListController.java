@@ -16,77 +16,70 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jennymakki.projectmanager.list.dto.CreateTaskListRequest;
 import com.jennymakki.projectmanager.list.dto.TaskListDto;
+import com.jennymakki.projectmanager.security.AuthUserResolver;
 import com.jennymakki.projectmanager.user.User;
-import com.jennymakki.projectmanager.user.UserRepository;
 
 @RestController
 @RequestMapping("/boards/{boardId}/lists")
 public class TaskListController {
 
-        private final TaskListService taskListService;
-        private final UserRepository userRepository;
+    private final TaskListService taskListService;
+    private final AuthUserResolver authUserResolver;
 
-        public TaskListController(TaskListService taskListService,
-                        UserRepository userRepository) {
-                this.taskListService = taskListService;
-                this.userRepository = userRepository;
-        }
+    public TaskListController(TaskListService taskListService,
+                              AuthUserResolver authUserResolver) {
+        this.taskListService = taskListService;
+        this.authUserResolver = authUserResolver;
+    }
 
-        @PostMapping
-        @ResponseStatus(HttpStatus.CREATED)
-        public TaskListDto create(
-                        @PathVariable Long boardId,
-                        @RequestBody CreateTaskListRequest request,
-                        Authentication auth) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TaskListDto create(
+            @PathVariable Long boardId,
+            @RequestBody CreateTaskListRequest request,
+            Authentication auth) {
 
-                User user = userRepository.findByEmail(auth.getName())
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
-                TaskList list = taskListService.createList(boardId, request.getName(), user);
+        TaskList list = taskListService.createList(boardId, request.getName(), user);
 
-                return TaskListDto.from(list);
-        }
+        return TaskListDto.from(list);
+    }
 
-        @GetMapping
-        public List<TaskListDto> getAll(
-                        @PathVariable Long boardId,
-                        Authentication auth) {
+    @GetMapping
+    public List<TaskListDto> getAll(
+            @PathVariable Long boardId,
+            Authentication auth) {
 
-                User user = userRepository.findByEmail(auth.getName())
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
-                return taskListService.getLists(boardId, user)
-                                .stream()
-                                .map(TaskListDto::from)
-                                .toList();
-        }
+        return taskListService.getLists(boardId, user)
+                .stream()
+                .map(TaskListDto::from)
+                .toList();
+    }
 
-        @PutMapping("/{id}")
-        public TaskListDto updateList(
-                        @PathVariable Long id,
-                        @RequestBody CreateTaskListRequest request,
-                        Authentication authentication) {
+    @PutMapping("/{id}")
+    public TaskListDto updateList(
+            @PathVariable Long id,
+            @RequestBody CreateTaskListRequest request,
+            Authentication auth) {
 
-                User user = userRepository.findByEmail(authentication.getName())
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
-                TaskList updated = taskListService.updateList(
-                                id,
-                                request.getName(),
-                                user);
+        TaskList updated = taskListService.updateList(id, request.getName(), user);
 
-                return TaskListDto.from(updated);
-        }
+        return TaskListDto.from(updated);
+    }
 
-        @DeleteMapping("/{id}")
-        @ResponseStatus(HttpStatus.NO_CONTENT)
-        public void deleteList(
-                        @PathVariable Long id,
-                        Authentication authentication) {
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteList(
+            @PathVariable Long id,
+            Authentication auth) {
 
-                User user = userRepository.findByEmail(authentication.getName())
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
-                taskListService.deleteList(id, user);
-        }
+        taskListService.deleteList(id, user);
+    }
 }

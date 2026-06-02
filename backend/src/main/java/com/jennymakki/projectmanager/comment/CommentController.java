@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jennymakki.projectmanager.comment.dto.CommentResponse;
 import com.jennymakki.projectmanager.comment.dto.CreateCommentRequest;
+import com.jennymakki.projectmanager.security.AuthUserResolver;
 import com.jennymakki.projectmanager.user.User;
-import com.jennymakki.projectmanager.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,19 +24,15 @@ import lombok.RequiredArgsConstructor;
 public class CommentController {
 
     private final CommentService commentService;
-    private final UserRepository userRepository;
+    private final AuthUserResolver authUserResolver;
 
     @PostMapping("/tasks/{taskId}/comments")
     public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long taskId,
             @RequestBody CreateCommentRequest request,
-            Authentication authentication) {
+            Authentication auth) {
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(commentService.addComment(taskId, request, user));
@@ -53,13 +48,9 @@ public class CommentController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long commentId,
-            Authentication authentication) {
+            Authentication auth) {
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
         commentService.deleteComment(commentId, user);
 

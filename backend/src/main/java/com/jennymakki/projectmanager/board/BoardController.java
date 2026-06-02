@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,98 +15,74 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jennymakki.projectmanager.board.dto.BoardDto;
 import com.jennymakki.projectmanager.board.dto.CreateBoardRequest;
+import com.jennymakki.projectmanager.security.AuthUserResolver;
 import com.jennymakki.projectmanager.user.User;
-import com.jennymakki.projectmanager.user.UserRepository;
 
 @RestController
 public class BoardController {
 
-        private final BoardService boardService;
-        private final UserRepository userRepository;
+    private final BoardService boardService;
+    private final AuthUserResolver authUserResolver;
 
-        public BoardController(BoardService boardService,
-                        UserRepository userRepository) {
-                this.boardService = boardService;
-                this.userRepository = userRepository;
-        }
+    public BoardController(BoardService boardService,
+                            AuthUserResolver authUserResolver) {
+        this.boardService = boardService;
+        this.authUserResolver = authUserResolver;
+    }
 
-        @PostMapping("/boards")
-        @ResponseStatus(HttpStatus.CREATED)
-        public BoardDto createBoard(
-                        @RequestBody CreateBoardRequest request,
-                        Authentication authentication) {
+    @PostMapping("/boards")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BoardDto createBoard(
+            @RequestBody CreateBoardRequest request,
+            Authentication auth) {
 
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername();
+        User user = authUserResolver.getUser(auth);
 
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        return BoardDto.from(
+                boardService.createBoard(request.getName(), user));
+    }
 
-                Board board = boardService.createBoard(request.getName(), user);
+    @GetMapping("/boards")
+    public List<BoardDto> getBoards(Authentication auth) {
 
-                return BoardDto.from(board);
-        }
+        User user = authUserResolver.getUser(auth);
 
-        @GetMapping("/boards")
-        public List<BoardDto> getBoards(Authentication authentication) {
+        return boardService.getBoardsForUser(user)
+                .stream()
+                .map(BoardDto::from)
+                .toList();
+    }
 
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername();
+    @GetMapping("/boards/{id}")
+    public BoardDto getBoardById(
+            @PathVariable Long id,
+            Authentication auth) {
 
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = authUserResolver.getUser(auth);
 
-                return boardService.getBoardsForUser(user)
-                                .stream()
-                                .map(BoardDto::from)
-                                .toList();
-        }
+        return BoardDto.from(boardService.getBoardById(id, user));
+    }
 
-        @GetMapping("/boards/{id}")
-        public BoardDto getBoardById(
-                        @PathVariable Long id,
-                        Authentication authentication) {
+    @PutMapping("/boards/{id}")
+    public BoardDto updateBoard(
+            @PathVariable Long id,
+            @RequestBody CreateBoardRequest request,
+            Authentication auth) {
 
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername();
+        User user = authUserResolver.getUser(auth);
 
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        return BoardDto.from(
+                boardService.updateBoard(id, request.getName(), user));
+    }
 
-                Board board = boardService.getBoardById(id, user);
+    @DeleteMapping("/boards/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBoard(
+            @PathVariable Long id,
+            Authentication auth) {
 
-                return BoardDto.from(board);
-        }
+        User user = authUserResolver.getUser(auth);
 
-        @PutMapping("/boards/{id}")
-        public BoardDto updateBoard(
-                        @PathVariable Long id,
-                        @RequestBody CreateBoardRequest request,
-                        Authentication authentication) {
-
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername();
-
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
-
-                Board updated = boardService.updateBoard(id, request.getName(), user);
-
-                return BoardDto.from(updated);
-        }
-
-        @DeleteMapping("/boards/{id}")
-        @ResponseStatus(HttpStatus.NO_CONTENT)
-        public void deleteBoard(
-                        @PathVariable Long id,
-                        Authentication authentication) {
-
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername();
-
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
-
-                boardService.deleteBoard(id, user);
-        }
+        boardService.deleteBoard(id, user);
+    }
 }

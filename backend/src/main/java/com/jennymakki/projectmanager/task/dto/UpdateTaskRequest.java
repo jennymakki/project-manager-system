@@ -46,4 +46,14 @@ public class UpdateTaskRequest {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
+    private Long taskListId;
+
+    public Long getTaskListId() {
+        return taskListId;
+    }
+
+    public void setTaskListId(Long taskListId) {
+        this.taskListId = taskListId;
+    }
 }

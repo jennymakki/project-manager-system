@@ -24,10 +24,11 @@ public class TaskListService {
     public TaskList createList(Long boardId, String name, User user) {
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
-        if (!board.getOwner().getId().equals(user.getId())) {
-            throw new AccessDeniedException("Not owner");
+        if (board.getOwner() == null ||
+                !board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner of board");
         }
 
         TaskList list = new TaskList(name, board);
@@ -37,10 +38,11 @@ public class TaskListService {
     public List<TaskList> getLists(Long boardId, User user) {
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("TaskList not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
-        if (!board.getOwner().getId().equals(user.getId())) {
-            throw new AccessDeniedException("Not owner");
+        if (board.getOwner() == null ||
+                !board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner of board");
         }
 
         return taskListRepository.findByBoardId(boardId);
@@ -53,12 +55,12 @@ public class TaskListService {
 
         Board board = list.getBoard();
 
-        if (!board.getOwner().getId().equals(user.getId())) {
-            throw new AccessDeniedException("Not owner");
+        if (board.getOwner() == null ||
+                !board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner of board");
         }
 
         list.setName(name);
-
         return taskListRepository.save(list);
     }
 
@@ -69,8 +71,9 @@ public class TaskListService {
 
         Board board = list.getBoard();
 
-        if (!board.getOwner().getId().equals(user.getId())) {
-            throw new AccessDeniedException("Not owner");
+        if (board.getOwner() == null ||
+                !board.getOwner().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Not owner of board");
         }
 
         taskListRepository.delete(list);
