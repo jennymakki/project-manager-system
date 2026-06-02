@@ -1,29 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDroppable } from "@dnd-kit/core";
 import axiosClient from "../../../../lib/api/axiosClient";
-import TaskCard from "../task/task-card";
+
 import type { List } from "../../../../types/list";
 import type { Task } from "../../../../types/task";
-import { useBreakpoint } from "../../../../design-system/hooks/useBreakpoint";
-import { useTheme } from "../../../../design-system/theme-provider";
+
+import { Card } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { Card } from "../../ui/card";
+import TaskCard from "../task/task-card";
 
-export default function ListColumn({ list }: { list: List }) {
-  const [tasks, setTasks] = useState<Task[]>([]);
+type Props = {
+  list: List;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+};
+
+export default function ListColumn({ list, tasks, setTasks }: Props) {
   const [title, setTitle] = useState("");
 
-  const { theme } = useTheme();
-  const { isMobile } = useBreakpoint();
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const res = await axiosClient.get(`/lists/${list.id}/tasks`);
-      setTasks(res.data.content || []);
-    };
-
-    fetchTasks();
-  }, [list.id]);
+  const { setNodeRef, isOver } = useDroppable({
+  id: list.id.toString(),
+  data: {
+    listId: list.id,
+  },
+});
 
   const createTask = async () => {
     if (!title.trim()) return;
@@ -39,41 +40,20 @@ export default function ListColumn({ list }: { list: List }) {
 
   return (
     <Card
+      ref={setNodeRef}
       style={{
-        width: isMobile ? "100%" : 288,
-        display: "flex",
-        flexDirection: "column",
-        gap: theme.spacing.sm,
-        flexShrink: 0,
+        minWidth: 280,
+        background: isOver ? "#e6f7ff" : undefined,
       }}
     >
-      <h3
-        style={{
-          fontSize: theme.typography.fontSize.md,
-          fontWeight: 500,
-          color: theme.colors.text,
-        }}
-      >
-        {list.name}
-      </h3>
+      <h3>{list.name}</h3>
 
-      <div style={{ display: "flex", gap: theme.spacing.sm }}>
-        <Input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="New task..."
-        />
-
+      <div style={{ display: "flex", gap: 8 }}>
+        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         <Button onClick={createTask}>+</Button>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: theme.spacing.sm,
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}

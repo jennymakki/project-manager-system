@@ -1,6 +1,9 @@
 export type Task = {
-  id: string;
+  id: number;
   title: string;
-  description?: string;
-  listId: string;
+  description: string;
+  status: "TODO" | "IN_PROGRESS" | "DONE";
+  taskListId: number;
+  assignedToId?: number;
+  dueDate?: string;
 };

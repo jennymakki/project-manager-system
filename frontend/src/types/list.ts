@@ -1,5 +1,8 @@
+import type { Task } from "./task";
+
 export type List = {
-  id: string;
+  id: number;
   name: string;
-  boardId: string;
+  boardId: number;
+  tasks: Task[];
 };

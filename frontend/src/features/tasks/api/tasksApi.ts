@@ -8,3 +8,18 @@ export const createTask = (listId: string, title: string) =>
     title,
     description: "",
   });
+
+export const updateTask = (
+  taskId: string,
+  data: {
+    title?: string;
+    description?: string;
+    status?: "TODO" | "IN_PROGRESS" | "DONE";
+    assignedUserId?: string;
+    dueDate?: string;
+    taskListId?: number;
+  }
+) => axiosClient.put(`/tasks/${taskId}`, data);
+
+export const deleteTask = (taskId: string) =>
+  axiosClient.delete(`/tasks/${taskId}`);

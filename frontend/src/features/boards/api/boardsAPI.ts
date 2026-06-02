@@ -11,5 +11,5 @@ export const createBoard = (name: string) =>
 export const getBoard = (id: string) =>
   axiosClient.get<Board>(`/boards/${id}`);
 
-export const getBoardLists = (id: string) =>
-  axiosClient.get<List[]>(`/boards/${id}/lists`);
+export const getBoardLists = (boardId: string) =>
+  axiosClient.get<List[]>(`/boards/${boardId}/lists`);

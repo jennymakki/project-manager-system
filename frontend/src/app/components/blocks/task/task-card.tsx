@@ -1,27 +1,29 @@
-import { useEffect, useState } from "react";
-import axiosClient from "../../../../lib/api/axiosClient.js";
-import type { Task } from "../../../../types/task.js";
-import type { Comment } from "../../../../types/comment.js";
+import { useState } from "react";
+import { useDraggable } from "@dnd-kit/core";
+import axiosClient from "../../../../lib/api/axiosClient";
 
-import { useTheme } from "../../../../design-system/theme-provider";
-import { Input } from "../../ui/input.js";
-import { Button } from "../../ui/button.js";
-import { Card } from "../../ui/card.js";
+import type { Task } from "../../../../types/task";
+import type { Comment } from "../../../../types/comment";
+
+import { Card } from "../../ui/card";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 
 export default function TaskCard({ task }: { task: Task }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
 
-  const { theme } = useTheme();
+  const { setNodeRef, attributes, listeners, transform, isDragging } =
+    useDraggable({
+      id: task.id.toString(),
+    });
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      const res = await axiosClient.get(`/tasks/${task.id}/comments`);
-      setComments(res.data);
-    };
-
-    fetchComments();
-  }, [task.id]);
+  const style: React.CSSProperties = {
+    opacity: isDragging ? 0.5 : 1,
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+  };
 
   const createComment = async () => {
     if (!content.trim()) return;
@@ -35,45 +37,26 @@ export default function TaskCard({ task }: { task: Task }) {
   };
 
   return (
-    <Card
-      style={{
-        padding: theme.spacing.sm,
-        display: "flex",
-        flexDirection: "column",
-        gap: theme.spacing.sm,
-      }}
-    >
+    <Card ref={setNodeRef} style={{ ...style, padding: 8 }}>
       <div
-        style={{
-          fontWeight: 500,
-          color: theme.colors.text,
-        }}
+        {...listeners}
+        {...attributes}
+        style={{ fontWeight: 600, cursor: "grab" }}
       >
         {task.title}
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ fontSize: 12 }}>
         {comments.map((c) => (
-          <div
-            style={{
-              fontSize: theme.typography.fontSize.xs,
-              fontWeight: 400,
-              color: theme.colors.textSecondary,
-            }}
-          >
+          <div key={c.id}>
             <div>{c.content}</div>
             <div>{c.author}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: theme.spacing.sm }}>
-        <Input
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write comment..."
-        />
-
+      <div style={{ display: "flex", gap: 8 }}>
+        <Input value={content} onChange={(e) => setContent(e.target.value)} />
         <Button onClick={createComment}>+</Button>
       </div>
     </Card>
