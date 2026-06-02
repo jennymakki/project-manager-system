@@ -54,6 +54,7 @@ class TaskServiceTest {
                 TaskStatus.TODO,
                 assignee.getId(),
                 null,
+                null,
                 owner
         );
 
@@ -82,6 +83,7 @@ class TaskServiceTest {
                         TaskStatus.TODO,
                         null,
                         pastDate,
+                        null,
                         owner
                 )
         );
@@ -107,6 +109,7 @@ class TaskServiceTest {
                         "Hacked",
                         "Hacked",
                         TaskStatus.DONE,
+                        null,
                         null,
                         null,
                         hacker
