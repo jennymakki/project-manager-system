@@ -46,7 +46,6 @@ export default function Register() {
     >
       <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
         
-        {/* Intro */}
         <Card
           style={{
             padding: 20,

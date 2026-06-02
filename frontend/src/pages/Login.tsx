@@ -73,7 +73,6 @@ export default function Login() {
           </p>
         </Card>
 
-        {/* Login card */}
         <Card
           style={{
             padding: 24,

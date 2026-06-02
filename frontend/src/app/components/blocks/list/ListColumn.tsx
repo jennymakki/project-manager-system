@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import axiosClient from "../../../../lib/api/axiosClient";
 
@@ -18,13 +18,34 @@ type Props = {
 
 export default function ListColumn({ list, tasks, setTasks }: Props) {
   const [title, setTitle] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+
+  const inputRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if (
+      inputRef.current &&
+      !inputRef.current.contains(event.target as Node)
+    ) {
+      setIsCreating(false);
+      setTitle("");
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   const { setNodeRef, isOver } = useDroppable({
-  id: list.id.toString(),
-  data: {
-    listId: list.id,
-  },
-});
+    id: list.id.toString(),
+    data: {
+      listId: list.id,
+    },
+  });
 
   const createTask = async () => {
     if (!title.trim()) return;
@@ -43,14 +64,37 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
       ref={setNodeRef}
       style={{
         minWidth: 280,
-        background: isOver ? "#e6f7ff" : undefined,
+        background: isOver ? "rgba(0, 120, 255, 0.08)" : undefined,
       }}
     >
       <h3>{list.name}</h3>
 
-      <div style={{ display: "flex", gap: 8 }}>
-        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        <Button onClick={createTask}>+</Button>
+      <div style={{ marginTop: 10 }} ref={inputRef}>
+        {isCreating ? (
+          <div style={{ display: "flex", gap: 8 }}>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter task title..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") createTask();
+                if (e.key === "Escape") {
+                  setIsCreating(false);
+                  setTitle("");
+                }
+              }}
+              autoFocus
+            />
+
+            <Button onClick={createTask} disabled={!title.trim()}>
+              Add
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => setIsCreating(true)} style={{ width: "100%" }}>
+            + Add task
+          </Button>
+        )}
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

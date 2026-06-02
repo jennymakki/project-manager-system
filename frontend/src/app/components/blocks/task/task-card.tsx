@@ -8,22 +8,20 @@ import type { Comment } from "../../../../types/comment";
 import { Card } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
+import { useTheme } from "../../../../design-system/theme-provider";
 
 export default function TaskCard({ task }: { task: Task }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
 
-useEffect(() => {
-  console.log("Fetching comments for task", task.id);
+  const { theme } = useTheme();
 
-  axiosClient
-    .get(`/tasks/${task.id}/comments`)
-    .then((res) => {
-      setComments(res.data);
-    })
-    .catch((err) => {
-    });
-}, [task.id]);
+  useEffect(() => {
+    axiosClient
+      .get(`/tasks/${task.id}/comments`)
+      .then((res) => setComments(res.data))
+      .catch(() => {});
+  }, [task.id]);
 
   const { setNodeRef, attributes, listeners, transform, isDragging } =
     useDraggable({
@@ -49,27 +47,65 @@ useEffect(() => {
   };
 
   return (
-    <Card ref={setNodeRef} style={{ ...style, padding: 8 }}>
+    <Card ref={setNodeRef} style={{ ...style, padding: 8, marginTop: 15 }}>
       <div
         {...listeners}
         {...attributes}
-        style={{ fontWeight: 600, cursor: "grab" }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontWeight: 600,
+          cursor: "grab",
+          padding: "4px 6px",
+          borderRadius: 6,
+          userSelect: "none",
+        }}
       >
-        {task.title}
+        <span
+          style={{
+            fontSize: 20,
+            fontWeight: 600,
+            color: theme.colors.primary,
+          }}
+        >
+          {task.title}
+        </span>
+        <span style={{ opacity: 0.4, fontSize: 16 }}>⋮⋮</span>
       </div>
 
-      <div style={{ fontSize: 12 }}>
+      <div style={{ fontSize: 14, marginTop: 8 }}>
         {comments.map((c) => (
-          <div key={c.id}>
-            <div>{c.content}</div>
-            <div>{c.author}</div>
-          </div>
+          <Card
+            key={c.id}
+            style={{
+              padding: 8,
+              marginBottom: 8,
+              background: theme.colors.background,
+              border: "1px solid rgba(0,0,0,0.06)",
+              borderRadius: 6,
+            }}
+          >
+            <div style={{ fontSize: 13 }}>{c.content}</div>
+
+            <div style={{ opacity: 0.6, fontSize: 11, marginTop: 4 }}>
+              {c.author}
+            </div>
+          </Card>
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 8 }}>
-        <Input value={content} onChange={(e) => setContent(e.target.value)} />
-        <Button onClick={createComment}>+</Button>
+      <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+        <Input
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write a comment..."
+          style={{
+            fontSize: 13,
+          }}
+        />
+
+        <Button onClick={createComment}>Post</Button>
       </div>
     </Card>
   );
