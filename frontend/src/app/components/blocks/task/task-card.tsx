@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import axiosClient from "../../../../lib/api/axiosClient";
 
@@ -12,6 +12,18 @@ import { Button } from "../../ui/button";
 export default function TaskCard({ task }: { task: Task }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
+
+useEffect(() => {
+  console.log("Fetching comments for task", task.id);
+
+  axiosClient
+    .get(`/tasks/${task.id}/comments`)
+    .then((res) => {
+      setComments(res.data);
+    })
+    .catch((err) => {
+    });
+}, [task.id]);
 
   const { setNodeRef, attributes, listeners, transform, isDragging } =
     useDraggable({
