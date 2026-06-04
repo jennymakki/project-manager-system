@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.jennymakki</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>projectmanager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name/>
     <description/>

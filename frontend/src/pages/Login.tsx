@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { login } from "../features/auth/api/authApi";
+
+import { useAuth } from "../features/auth/hooks/useAuth";
 
 import { Button } from "../app/components/ui/button";
 import { Input } from "../app/components/ui/input";
@@ -10,24 +11,18 @@ import { useTheme } from "../design-system/theme-provider";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { theme } = useTheme();
 
+  const { loginUser, loading } = useAuth();
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
+    await loginUser(email, password);
 
-      const res = await login(email, password);
-      localStorage.setItem("token", res.data.token);
-
-      navigate("/dashboard");
-    } finally {
-      setLoading(false);
-    }
+    navigate("/dashboard");
   };
 
   return (
@@ -44,7 +39,6 @@ export default function Login() {
     >
       <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
         
-        {/* Intro card */}
         <Card
           style={{
             padding: 20,
@@ -52,23 +46,11 @@ export default function Login() {
             color: theme.colors.text,
           }}
         >
-          <h2
-            style={{
-              fontSize: theme.typography.fontSize.lg,
-              fontWeight: 700,
-              marginBottom: 6,
-            }}
-          >
+          <h2 style={{ fontSize: theme.typography.fontSize.lg, fontWeight: 700, marginBottom: 6 }}>
             Welcome back
           </h2>
 
-          <p
-            style={{
-              fontSize: theme.typography.fontSize.sm,
-              color: theme.colors.textSecondary,
-              lineHeight: 1.5,
-            }}
-          >
+          <p style={{ fontSize: theme.typography.fontSize.sm, color: theme.colors.textSecondary }}>
             Sign in to manage your boards, tasks and collaborate with your team.
           </p>
         </Card>
@@ -86,11 +68,7 @@ export default function Login() {
 
           <form
             onSubmit={handleLogin}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
+            style={{ display: "flex", flexDirection: "column", gap: 12 }}
           >
             <Input
               value={email}

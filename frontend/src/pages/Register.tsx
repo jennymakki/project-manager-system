@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-import { register, login } from "../features/auth/api/authApi";
+import { useAuth } from "../features/auth/hooks/useAuth";
+
 import { Button } from "../app/components/ui/button";
 import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
@@ -10,26 +11,18 @@ import { useTheme } from "../design-system/theme-provider";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { theme } = useTheme();
 
+  const { registerUser, loading } = useAuth();
+
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
+    await registerUser(email, password);
 
-      await register(email, password);
-
-      const res = await login(email, password);
-      localStorage.setItem("token", res.data.token);
-
-      navigate("/dashboard", { replace: true });
-    } finally {
-      setLoading(false);
-    }
+    navigate("/dashboard", { replace: true });
   };
 
   return (
@@ -53,23 +46,11 @@ export default function Register() {
             color: theme.colors.text,
           }}
         >
-          <h2
-            style={{
-              fontSize: theme.typography.fontSize.lg,
-              fontWeight: 700,
-              marginBottom: 6,
-            }}
-          >
+          <h2 style={{ fontSize: theme.typography.fontSize.lg, fontWeight: 700, marginBottom: 6 }}>
             Create your workspace
           </h2>
 
-          <p
-            style={{
-              fontSize: theme.typography.fontSize.sm,
-              color: theme.colors.textSecondary,
-              lineHeight: 1.5,
-            }}
-          >
+          <p style={{ fontSize: theme.typography.fontSize.sm, color: theme.colors.textSecondary }}>
             Start organizing projects, managing tasks and collaborating with your team in one place.
           </p>
         </Card>
@@ -87,11 +68,7 @@ export default function Register() {
 
           <form
             onSubmit={handleRegister}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
+            style={{ display: "flex", flexDirection: "column", gap: 12 }}
           >
             <Input
               value={email}
