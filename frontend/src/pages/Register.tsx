@@ -22,6 +22,7 @@ export default function Register() {
 
   return (
     <div
+      className="animate-page-fade-in"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -32,9 +33,18 @@ export default function Register() {
         padding: 16,
       }}
     >
-      <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
-
-        <Card style={{ padding: 20, background: theme.colors.surface }}>
+      <div
+        style={{
+          width: 380,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+        }}
+      >
+        <Card
+          className="animate-fade-up"
+          style={{ padding: 20, background: theme.colors.surface }}
+        >
           <h2 style={{ fontWeight: 700, marginBottom: 6 }}>
             Create your workspace
           </h2>
@@ -44,7 +54,10 @@ export default function Register() {
           </p>
         </Card>
 
-        <Card style={{ padding: 24, background: theme.colors.surface }}>
+        <Card
+          className="animate-fade-up animate-delay-1"
+          style={{ padding: 24, background: theme.colors.surface }}
+        >
           <h1 style={{ marginBottom: 16 }}>Register</h1>
 
           <form
@@ -52,14 +65,21 @@ export default function Register() {
             style={{ display: "flex", flexDirection: "column", gap: 12 }}
           >
             <Input
+              className="input-animated"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="email"
             />
 
-            {/* PASSWORD (samma pattern som Login) */}
-            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Input
+                className="input-animated"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -85,12 +105,20 @@ export default function Register() {
             </div>
 
             {error && (
-              <p style={{ color: "red", fontSize: 13 }}>
+              <p
+                className="animate-error"
+                style={{ color: "red", fontSize: 13 }}
+              >
                 {error}
               </p>
             )}
 
-            <Button loading={loading} type="submit" disabled={loading}>
+            <Button
+              className="button-animated"
+              loading={loading}
+              type="submit"
+              disabled={loading}
+            >
               Create account
             </Button>
 
@@ -99,7 +127,6 @@ export default function Register() {
             </Link>
           </form>
         </Card>
-
       </div>
     </div>
   );
