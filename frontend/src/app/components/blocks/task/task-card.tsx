@@ -1,27 +1,19 @@
-import { useState, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import axiosClient from "../../../../lib/api/axiosClient";
 
 import type { Task } from "../../../../types/task";
-import type { Comment } from "../../../../types/comment";
-
 import { Card } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useTheme } from "../../../../design-system/theme-provider";
 
+import { useState } from "react";
+import { useComments } from "../../../../features/comments/hooks/useComments";
+
 export default function TaskCard({ task }: { task: Task }) {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const { theme } = useTheme();
   const [content, setContent] = useState("");
 
-  const { theme } = useTheme();
-
-  useEffect(() => {
-    axiosClient
-      .get(`/tasks/${task.id}/comments`)
-      .then((res) => setComments(res.data))
-      .catch(() => {});
-  }, [task.id]);
+  const { comments, createComment } = useComments(task.id);
 
   const { setNodeRef, attributes, listeners, transform, isDragging } =
     useDraggable({
@@ -35,19 +27,15 @@ export default function TaskCard({ task }: { task: Task }) {
       : undefined,
   };
 
-  const createComment = async () => {
-    if (!content.trim()) return;
-
-    const res = await axiosClient.post(`/tasks/${task.id}/comments`, {
-      content,
-    });
-
-    setComments((prev) => [...prev, res.data]);
+  const handleCreateComment = async () => {
+    await createComment(content);
     setContent("");
   };
 
   return (
     <Card ref={setNodeRef} style={{ ...style, padding: 8, marginTop: 15 }}>
+      
+      {/* Header */}
       <div
         {...listeners}
         {...attributes}
@@ -58,54 +46,33 @@ export default function TaskCard({ task }: { task: Task }) {
           fontWeight: 600,
           cursor: "grab",
           padding: "4px 6px",
-          borderRadius: 6,
-          userSelect: "none",
         }}
       >
-        <span
-          style={{
-            fontSize: 20,
-            fontWeight: 600,
-            color: theme.colors.primary,
-          }}
-        >
+        <span style={{ fontSize: 20, color: theme.colors.primary }}>
           {task.title}
         </span>
-        <span style={{ opacity: 0.4, fontSize: 16 }}>⋮⋮</span>
+        <span style={{ opacity: 0.4 }}>⋮⋮</span>
       </div>
 
+      {/* Comments */}
       <div style={{ fontSize: 14, marginTop: 8 }}>
         {comments.map((c) => (
-          <Card
-            key={c.id}
-            style={{
-              padding: 8,
-              marginBottom: 8,
-              background: theme.colors.background,
-              border: "1px solid rgba(0,0,0,0.06)",
-              borderRadius: 6,
-            }}
-          >
+          <Card key={c.id} style={{ padding: 8, marginBottom: 8 }}>
             <div style={{ fontSize: 13 }}>{c.content}</div>
-
-            <div style={{ opacity: 0.6, fontSize: 11, marginTop: 4 }}>
-              {c.author}
-            </div>
+            <div style={{ opacity: 0.6, fontSize: 11 }}>{c.author}</div>
           </Card>
         ))}
       </div>
 
+      {/* Add comment */}
       <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
         <Input
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write a comment..."
-          style={{
-            fontSize: 13,
-          }}
         />
 
-        <Button onClick={createComment}>Post</Button>
+        <Button onClick={handleCreateComment}>Post</Button>
       </div>
     </Card>
   );

@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { useDroppable } from "@dnd-kit/core";
-import axiosClient from "../../../../lib/api/axiosClient";
 
 import type { List } from "../../../../types/list";
 import type { Task } from "../../../../types/task";
@@ -9,6 +8,8 @@ import { Card } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import TaskCard from "../task/task-card";
+
+import { useTasks } from "../../../../features/tasks/hooks/useTasks";
 
 type Props = {
   list: List;
@@ -20,42 +21,33 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
   const [title, setTitle] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
+  const { createTask } = useTasks(setTasks);
+
   const inputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-  function handleClickOutside(event: MouseEvent) {
-    if (
-      inputRef.current &&
-      !inputRef.current.contains(event.target as Node)
-    ) {
-      setIsCreating(false);
-      setTitle("");
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setIsCreating(false);
+        setTitle("");
+      }
     }
-  }
 
-  document.addEventListener("mousedown", handleClickOutside);
-
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const { setNodeRef, isOver } = useDroppable({
     id: list.id.toString(),
-    data: {
-      listId: list.id,
-    },
+    data: { listId: list.id },
   });
 
-  const createTask = async () => {
-    if (!title.trim()) return;
-
-    const res = await axiosClient.post(`/lists/${list.id}/tasks`, {
-      title,
-      description: "",
-    });
-
-    setTasks((prev) => [...prev, res.data]);
+  const handleCreateTask = async () => {
+    await createTask(list.id, title);
     setTitle("");
   };
 
@@ -69,7 +61,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
     >
       <h3>{list.name}</h3>
 
-      <div style={{ marginTop: 10 }} ref={inputRef}>
+      <div ref={inputRef} style={{ marginTop: 10 }}>
         {isCreating ? (
           <div style={{ display: "flex", gap: 8 }}>
             <Input
@@ -77,7 +69,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter task title..."
               onKeyDown={(e) => {
-                if (e.key === "Enter") createTask();
+                if (e.key === "Enter") handleCreateTask();
                 if (e.key === "Escape") {
                   setIsCreating(false);
                   setTitle("");
@@ -86,7 +78,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
               autoFocus
             />
 
-            <Button onClick={createTask} disabled={!title.trim()}>
+            <Button onClick={handleCreateTask} disabled={!title.trim()}>
               Add
             </Button>
           </div>
