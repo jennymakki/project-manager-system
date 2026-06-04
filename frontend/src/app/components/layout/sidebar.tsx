@@ -15,6 +15,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const { theme } = useTheme();
   const { boards } = useBoards();
   const { isMobile } = useBreakpoint();
+
   const isDashboard = location.pathname === "/dashboard";
 
   const isActive = (path: string) => location.pathname === path;
@@ -34,25 +35,37 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         background: theme.colors.background,
         display: "flex",
         flexDirection: "column",
-        gap: theme.spacing.lg,
+        gap: theme.spacing.md,
       }}
     >
-      {isMobile && (
-        <button
-          onClick={onClose}
-          aria-label="Close sidebar"
-          style={{
-            alignSelf: "flex-end",
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            fontSize: 20,
-            color: theme.colors.text,
-          }}
-        >
-          ✕
-        </button>
-      )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <ThemeToggle />
+
+        {isMobile && open && (
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              border: "none",
+              background: "transparent",
+              fontSize: 20,
+              cursor: "pointer",
+              color: theme.colors.text,
+            }}
+          >
+            ✕
+          </button>
+        )}
+      </div>
 
       {!isDashboard && (
         <Link
@@ -72,6 +85,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <span>Back to Dashboard</span>
         </Link>
       )}
+
+      <hr style={{ opacity: 0.1 }} />
 
       <div>
         <div
@@ -115,9 +130,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
       </div>
 
-      <div style={{ marginTop: "auto" }}>
-        <ThemeToggle />
-      </div>
+      <div style={{ marginTop: "auto" }} />
     </aside>
   );
 }

@@ -18,7 +18,7 @@ export const useAuth = () => {
       localStorage.setItem("token", res.data.token);
 
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       setError("Invalid email or password");
     } finally {
       setLoading(false);
@@ -37,16 +37,22 @@ export const useAuth = () => {
       localStorage.setItem("token", res.data.token);
 
       navigate("/dashboard", { replace: true });
-    } catch (err) {
+    } catch {
       setError("Could not create account");
     } finally {
       setLoading(false);
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return {
     loginUser,
     registerUser,
+    logout,
     loading,
     error,
   };

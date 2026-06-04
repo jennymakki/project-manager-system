@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../../design-system/theme-provider";
 import { useBreakpoint } from "../../../design-system/hooks/useBreakpoint";
+import { useAuth } from "../../../features/auth/hooks/useAuth";
 
 type HeaderProps = {
   onMenuClick: () => void;
@@ -10,11 +11,9 @@ export function Header({ onMenuClick }: HeaderProps) {
   const { theme } = useTheme();
   const { isMobile } = useBreakpoint();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+  const handleLogout = () => logout();
 
   return (
     <header
@@ -23,7 +22,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: `0 ${theme.spacing.md}px`,
+        padding: `0 24px`,
         borderBottom: `1px solid ${theme.colors.border}`,
         background: theme.colors.surface,
       }}
@@ -32,6 +31,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         {isMobile && (
           <button
             onClick={onMenuClick}
+            aria-label="Open menu"
             style={{
               border: "none",
               background: "transparent",
@@ -51,12 +51,13 @@ export function Header({ onMenuClick }: HeaderProps) {
             color: theme.colors.text,
           }}
         >
-          Project Manager
+          {isMobile ? "PM" : "Project Manager"}
         </div>
       </div>
 
       <button
         onClick={handleLogout}
+        aria-label="Log out"
         style={{
           border: "none",
           background: "transparent",
