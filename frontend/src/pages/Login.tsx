@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/useAuth";
 
 import { Button } from "../app/components/ui/button";
@@ -11,18 +10,14 @@ import { useTheme } from "../design-system/theme-provider";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
   const { theme } = useTheme();
-
-  const { loginUser, loading } = useAuth();
+  const { loginUser, loading, error } = useAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     await loginUser(email, password);
-
-    navigate("/dashboard");
   };
 
   return (
@@ -30,75 +25,78 @@ export default function Login() {
       style={{
         minHeight: "100vh",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
+        alignItems: "center",
         background: theme.colors.background,
         color: theme.colors.text,
         padding: 16,
       }}
     >
       <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
-        
-        <Card
-          style={{
-            padding: 20,
-            background: theme.colors.surface,
-            color: theme.colors.text,
-          }}
-        >
-          <h2 style={{ fontSize: theme.typography.fontSize.lg, fontWeight: 700, marginBottom: 6 }}>
+
+        <Card style={{ padding: 20, background: theme.colors.surface }}>
+          <h2 style={{ fontWeight: 700, marginBottom: 6 }}>
             Welcome back
           </h2>
 
-          <p style={{ fontSize: theme.typography.fontSize.sm, color: theme.colors.textSecondary }}>
-            Sign in to manage your boards, tasks and collaborate with your team.
+          <p style={{ fontSize: 13, opacity: 0.7 }}>
+            Sign in to manage your boards and tasks.
           </p>
         </Card>
 
-        <Card
-          style={{
-            padding: 24,
-            background: theme.colors.surface,
-            color: theme.colors.text,
-          }}
-        >
-          <h1 style={{ marginBottom: 16, fontSize: 20, fontWeight: 700 }}>
-            Login
-          </h1>
+        <Card style={{ padding: 24, background: theme.colors.surface }}>
+          <h1 style={{ marginBottom: 16 }}>Log in</h1>
 
-          <form
-            onSubmit={handleLogin}
-            style={{ display: "flex", flexDirection: "column", gap: 12 }}
-          >
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="email"
             />
 
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="password"
-            />
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="password"
+                style={{ paddingRight: 40 }}
+              />
 
-            <Button loading={loading} type="submit">
-              Login
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 12,
+                  opacity: 0.7,
+                }}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+
+            {error && (
+              <p style={{ color: "red", fontSize: 13 }}>
+                {error}
+              </p>
+            )}
+
+            <Button loading={loading} type="submit" disabled={loading}>
+              Log in
             </Button>
 
-            <Link
-              to="/register"
-              style={{
-                color: theme.colors.primary,
-                fontSize: 14,
-                textAlign: "center",
-              }}
-            >
+            <Link to="/register" style={{ textAlign: "center", fontSize: 13 }}>
               Create account
             </Link>
           </form>
         </Card>
+
       </div>
     </div>
   );

@@ -4,10 +4,13 @@ import { login, register } from "../api/authApi";
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const loginUser = async (email: string, password: string) => {
     setLoading(true);
+    setError(null);
 
     try {
       const res = await login(email, password);
@@ -15,6 +18,8 @@ export const useAuth = () => {
       localStorage.setItem("token", res.data.token);
 
       navigate("/dashboard");
+    } catch (err) {
+      setError("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -22,6 +27,7 @@ export const useAuth = () => {
 
   const registerUser = async (email: string, password: string) => {
     setLoading(true);
+    setError(null);
 
     try {
       await register(email, password);
@@ -31,6 +37,8 @@ export const useAuth = () => {
       localStorage.setItem("token", res.data.token);
 
       navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError("Could not create account");
     } finally {
       setLoading(false);
     }
@@ -40,5 +48,6 @@ export const useAuth = () => {
     loginUser,
     registerUser,
     loading,
+    error,
   };
 };

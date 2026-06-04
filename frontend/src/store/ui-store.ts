@@ -10,3 +10,8 @@ export const useUIStore = create<UIState>((set) => ({
   toggleSidebar: () =>
     set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 }));
+
+/* 
+modals (open/close globalt)
+toasts / notifications
+loading overlays */
