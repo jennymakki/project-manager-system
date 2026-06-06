@@ -21,7 +21,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
   const [title, setTitle] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  const { createTask } = useTasks(setTasks);
+  const { createTask, removeTask } = useTasks(setTasks);
 
   const inputRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +91,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} removeTask={removeTask} />
         ))}
       </div>
     </Card>

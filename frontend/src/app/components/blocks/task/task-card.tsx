@@ -9,7 +9,13 @@ import { useTheme } from "../../../../design-system/theme-provider";
 import { useState } from "react";
 import { useComments } from "../../../../features/comments/hooks/useComments";
 
-export default function TaskCard({ task }: { task: Task }) {
+export default function TaskCard({
+  task,
+  removeTask,
+}: {
+  task: Task;
+  removeTask: (taskId: number) => void;
+}) {
   const { theme } = useTheme();
   const [content, setContent] = useState("");
 
@@ -35,21 +41,47 @@ export default function TaskCard({ task }: { task: Task }) {
   return (
     <Card ref={setNodeRef} style={{ ...style, padding: 8, marginTop: 15 }}>
       <div
-        {...listeners}
-        {...attributes}
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          fontWeight: 600,
-          cursor: "grab",
-          padding: "4px 6px",
+          marginBottom: 8,
         }}
       >
-        <span style={{ fontSize: 20, color: theme.colors.primary }}>
-          {task.title}
-        </span>
-        <span style={{ opacity: 0.4 }}>⋮⋮</span>
+        <div
+          {...listeners}
+          {...attributes}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontWeight: 600,
+            cursor: "grab",
+          }}
+        >
+          <span style={{ fontSize: 20, color: theme.colors.primary }}>
+            {task.title}
+          </span>
+          <span style={{ opacity: 0.4 }}>⋮⋮</span>
+        </div>
+
+        <Button
+          variant="danger"
+          style={{
+            padding: "2px 6px",
+            fontSize: 12,
+            borderRadius: 6,
+            lineHeight: 1,
+            minWidth: 24,
+            height: 24,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => removeTask(task.id)}
+        >
+          X
+        </Button>
       </div>
 
       <div style={{ fontSize: 14, marginTop: 8 }}>
@@ -85,14 +117,29 @@ export default function TaskCard({ task }: { task: Task }) {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          marginTop: 8,
+        }}
+      >
         <Input
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write a comment..."
         />
 
-        <Button onClick={handleCreateComment}>Post</Button>
+        <Button
+          style={{
+            padding: "4px 8px",
+            fontSize: 12,
+            borderRadius: 6,
+          }}
+          onClick={handleCreateComment}
+        >
+          Post
+        </Button>
       </div>
     </Card>
   );

@@ -10,7 +10,7 @@ export const createTask = (listId: string, title: string) =>
   });
 
 export const updateTask = (
-  taskId: string,
+  taskId: number,
   data: {
     title?: string;
     description?: string;
@@ -21,5 +21,5 @@ export const updateTask = (
   }
 ) => axiosClient.put(`/tasks/${taskId}`, data);
 
-export const deleteTask = (taskId: string) =>
+export const deleteTask = (taskId: number) =>
   axiosClient.delete(`/tasks/${taskId}`);
