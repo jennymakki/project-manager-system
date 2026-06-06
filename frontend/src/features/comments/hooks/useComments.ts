@@ -22,8 +22,18 @@ export const useComments = (taskId: number) => {
     setComments((prev) => [...prev, res.data]);
   };
 
+  const deleteComment = async (commentId: number) => {
+  await axiosClient.delete(`/comments/${commentId}`);
+
+  setComments((prev) =>
+    prev.filter((comment) => comment.id !== commentId)
+  );
+};
+
+
   return {
     comments,
     createComment,
+    deleteComment
   };
 };

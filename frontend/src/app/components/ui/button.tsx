@@ -3,16 +3,23 @@ import { Spinner } from "./spinner";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
+  variant?: "primary" | "danger";
 };
 
 export function Button({
   children,
   loading,
   disabled,
+  variant = "primary",
   style,
   ...props
 }: ButtonProps) {
   const { theme } = useTheme();
+
+  const backgroundColor =
+  variant === "danger"
+    ? "#dc2626"
+    : theme.colors.primary;
 
   return (
     <button
@@ -22,7 +29,7 @@ export function Button({
       style={{
         padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
         borderRadius: theme.radius.sm,
-        background: loading ? theme.colors.textSecondary : theme.colors.primary,
+        background: loading ? theme.colors.textSecondary : backgroundColor,
         color: "#fff",
         border: "none",
         cursor: loading ? "not-allowed" : "pointer",

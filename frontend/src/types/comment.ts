@@ -1,5 +1,5 @@
 export type Comment = {
-  id: string;
+  id: number;
   content: string;
   author: string;
   taskId: string;
