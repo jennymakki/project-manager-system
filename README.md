@@ -1,6 +1,6 @@
 # Project Manager API (Fullstack)
 
-A full-stack project management application built with **Spring Boot + React** that allows users to create accounts, authenticate with JWT, and manage boards and tasks.
+A full-stack project management application built with **Spring Boot + React** that allows users to manage boards, lists, tasks and comments through a drag-and-drop interface.
 
 The project is built with a layered architecture and follows a feature-based design approach.
 
@@ -41,6 +41,18 @@ https://project-manager-api-2z4a.onrender.com
 ### Dashboard
 - Displays user-specific boards
 - Protected dashboard access (requires login)
+
+#### Tasks
+- Create, update and delete tasks
+- Drag & drop between lists
+
+#### Comments
+- Create and delete comments on tasks
+
+#### User Experience
+- Light/Dark mode
+- Responsive UI
+- Custom design system
 
 ### Frontend
 - React + Vite
@@ -111,15 +123,30 @@ Frontend architecture:
 ## API Overview
 
 ### Auth
-- `POST /auth/register`
-- `POST /auth/login`
+POST /auth/register
+POST /auth/login
 
 ### Boards
-- `GET /boards`
-- `POST /boards`
-- `GET /boards/{id}`
-- `PUT /boards/{id}`
-- `DELETE /boards/{id}`
+GET /boards
+POST /boards
+PUT /boards/{id}
+DELETE /boards/{id}
+
+### Lists
+GET /boards/{boardId}/lists
+POST /boards/{boardId}/lists
+
+### Tasks
+GET /lists/{listId}/tasks
+POST /lists/{listId}/tasks
+PUT /tasks/{taskId}
+DELETE /tasks/{taskId}
+PATCH /tasks/{taskId}/move
+
+### Comments
+GET /tasks/{taskId}/comments
+POST /tasks/{taskId}/comments
+DELETE /comments/{commentId}
 
 ---
 
@@ -169,9 +196,13 @@ npm run dev
 
 ---
 
-## What I learned
-- JWT authentication in Spring Security
-- Full-stack integration between React and Spring Boot
-- Handling protected routes in React
-- API design with layered architecture
-- Debugging CORS and authentication issues
+### What I Learned
+
+- JWT authentication with Spring Security
+- Full-stack architecture with React and Spring Boot
+- Designing REST APIs with layered architecture
+- Building reusable UI components and a custom design system
+- Managing application state with Context API and custom hooks
+- Implementing drag & drop interactions with dnd-kit
+- Structuring applications using feature-based architecture
+- Debugging authentication, CORS and client-server communication
