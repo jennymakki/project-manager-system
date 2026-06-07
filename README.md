@@ -21,7 +21,7 @@ https://project-manager-api-2z4a.onrender.com
 
 - Spring Boot REST API
 - JWT authentication
-- Boards, Lists, Tasks CRUD
+- Boards, Lists, Tasks, Comments CRUD
 
 ---
 
@@ -82,10 +82,18 @@ Frontend architecture:
 
 ### Frontend
 - React (Vite)
+- TypeScript
 - React Router
 - Axios
-- Tailwind CSS
+- dnd-kit (Drag & Drop)
 - Context API
+- Custom Design System
+  - Theme Provider
+  - Light/Dark Mode
+  - Reusable UI Components
+  - Design Tokens
+- Feature-Based Folder Structure
+- Custom React Hooks
 
 ---
 
@@ -127,16 +135,6 @@ Each feature is developed using a Red → Green → Refactor cycle.
 
 ---
 
-## Current Status
-
-- Authentication system fully implemented
-- Frontend login/register flow complete
-- JWT-based protected routes working
-- Board functionality implemented in backend (frontend integration ongoing)
-- No deployment yet (local development only)
-
----
-
 ## Database
 
 - H2 in-memory database (development mode)
@@ -148,8 +146,7 @@ Each feature is developed using a Red → Green → Refactor cycle.
 
 - Task management (lists + tasks fully connected in UI)
 - Task assignment to users
-- Due dates & status tracking (TODO, IN_PROGRESS, DONE)
-- Comments system
+- Due dates for tasks
 - Search & filtering
 - Pagination
 - PostgreSQL production database
