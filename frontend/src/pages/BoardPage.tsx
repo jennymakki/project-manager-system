@@ -1,4 +1,5 @@
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+import { useEffect, useState } from "react";
 
 import ListColumn from "../app/components/blocks/list/ListColumn";
 import { Card } from "../app/components/ui/card";
@@ -7,6 +8,8 @@ import { useBreakpoint } from "../design-system/hooks/useBreakpoint";
 import { useTheme } from "../design-system/theme-provider";
 
 import { useBoard } from "../features/boards/hooks/useBoard";
+
+import { Pencil } from "lucide-react";
 
 export default function BoardPage() {
   const { theme } = useTheme();
@@ -20,7 +23,24 @@ export default function BoardPage() {
     moveTask,
     loading,
     removeBoard,
+    updateBoard,
   } = useBoard();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (board?.name) {
+      setName(board.name);
+    }
+  }, [board]);
+
+  const saveBoardName = () => {
+    if (!board || name.trim() === "") return;
+
+    updateBoard(Number(board.id), name.trim());
+    setIsEditing(false);
+  };
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -46,8 +66,64 @@ export default function BoardPage() {
         }}
       >
         <Card>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h1 style={{ fontSize: 24, fontWeight: 700 }}>{board.name}</h1>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            {isEditing ? (
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={saveBoardName}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") saveBoardName();
+                  if (e.key === "Escape") {
+                    setName(board.name);
+                    setIsEditing(false);
+                  }
+                }}
+                autoFocus
+                style={{
+                  fontSize: 24,
+                  fontWeight: 700,
+                  padding: 4,
+                }}
+              />
+            ) : (
+              <h1
+                onClick={() => setIsEditing(true)}
+                style={{
+                  fontSize: 24,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+                onMouseEnter={(e) => {
+                  const icon = e.currentTarget.querySelector("svg");
+                  if (icon) icon.style.opacity = "1";
+                }}
+                onMouseLeave={(e) => {
+                  const icon = e.currentTarget.querySelector("svg");
+                  if (icon) icon.style.opacity = "0.4";
+                }}
+              >
+                {board.name}
+
+                <Pencil
+                  size={16}
+                  style={{
+                    opacity: 0.5,
+                    transition: "0.2s",
+                  }}
+                />
+              </h1>
+            )}
 
             <Button
               variant="danger"

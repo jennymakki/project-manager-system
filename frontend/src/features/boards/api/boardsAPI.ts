@@ -16,3 +16,6 @@ export const getBoardLists = (boardId: string) =>
 
 export const deleteBoard = (boardId: number) =>
   axiosClient.delete(`/boards/${boardId}`);
+
+export const updateBoard = (id: number, name: string) =>
+  axiosClient.put(`/boards/${id}`, { name });

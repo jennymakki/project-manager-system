@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../../lib/api/axiosClient"; 
 import { getBoard, getBoardLists } from "../api/boardsAPI";
 import { deleteBoard as deleteBoardApi } from "../api/boardsAPI";
+import { updateBoard as updateBoardApi } from "../api/boardsAPI";
 
 import type { Board } from "../../../types/board";
 import type { List } from "../../../types/list";
@@ -55,6 +56,16 @@ export const useBoard = () => {
     }
   };
 
+  const updateBoard = async (boardId: number, name: string) => {
+  try {
+    const res = await updateBoardApi(boardId, name);
+
+    setBoard(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   const moveTask = async (taskId: number, newListId: number) => {
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, taskListId: newListId } : t)),
@@ -87,6 +98,7 @@ export const useBoard = () => {
     setTasks,
     moveTask,
     removeBoard,
+    updateBoard,
     loading,
   };
 };
