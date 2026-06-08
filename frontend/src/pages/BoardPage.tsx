@@ -2,6 +2,7 @@ import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 
 import ListColumn from "../app/components/blocks/list/ListColumn";
 import { Card } from "../app/components/ui/card";
+import { Button } from "../app/components/ui/button";
 import { useBreakpoint } from "../design-system/hooks/useBreakpoint";
 import { useTheme } from "../design-system/theme-provider";
 
@@ -18,6 +19,7 @@ export default function BoardPage() {
     setTasks,
     moveTask,
     loading,
+    removeBoard,
   } = useBoard();
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -44,7 +46,16 @@ export default function BoardPage() {
         }}
       >
         <Card>
-          <h1 style={{ fontSize: 24, fontWeight: 700 }}>{board.name}</h1>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h1 style={{ fontSize: 24, fontWeight: 700 }}>{board.name}</h1>
+
+            <Button
+              variant="danger"
+              onClick={() => removeBoard(Number(board.id))}
+            >
+              Delete board
+            </Button>
+          </div>
         </Card>
 
         <div

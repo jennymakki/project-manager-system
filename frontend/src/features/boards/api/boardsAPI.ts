@@ -13,3 +13,6 @@ export const getBoard = (id: string) =>
 
 export const getBoardLists = (boardId: string) =>
   axiosClient.get<List[]>(`/boards/${boardId}/lists`);
+
+export const deleteBoard = (boardId: number) =>
+  axiosClient.delete(`/boards/${boardId}`);
