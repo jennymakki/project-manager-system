@@ -9,7 +9,7 @@ import { useTheme } from "../design-system/theme-provider";
 
 import { useBoard } from "../features/boards/hooks/useBoard";
 
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 export default function BoardPage() {
   const { theme } = useTheme();
@@ -127,9 +127,14 @@ export default function BoardPage() {
 
             <Button
               variant="danger"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
               onClick={() => removeBoard(Number(board.id))}
             >
-              Delete board
+              <Trash2 size={14} />
             </Button>
           </div>
         </Card>

@@ -1,5 +1,6 @@
 import axiosClient from "../../../lib/api/axiosClient";
 import type { Task } from "../../../types/task";
+import { updateTask as updateTaskApi } from "../api/tasksApi";
 
 export const useTasks = (
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
@@ -22,8 +23,19 @@ export const useTasks = (
   setTasks((prev) => prev.filter((t) => t.id !== taskId));
 };
 
+const updateTask = async (taskId: number, title: string) => {
+  const res = await updateTaskApi(taskId, {
+    title,
+  });
+
+  setTasks((prev) =>
+    prev.map((t) => (t.id === taskId ? res.data : t))
+  );
+};
+
   return {
     createTask,
     removeTask,
+    updateTask,
   };
 };
