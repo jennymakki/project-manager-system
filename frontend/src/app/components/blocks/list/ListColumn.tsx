@@ -10,6 +10,7 @@ import { Button } from "../../ui/button";
 import TaskCard from "../task/task-card";
 
 import { useTasks } from "../../../../features/tasks/hooks/useTasks";
+import { useTheme } from "../../../../design-system/theme-provider";
 
 type Props = {
   list: List;
@@ -22,6 +23,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
   const [isCreating, setIsCreating] = useState(false);
 
   const { createTask, removeTask, updateTask } = useTasks(setTasks);
+  const { theme } = useTheme();
 
   const inputRef = useRef<HTMLDivElement>(null);
 
@@ -37,8 +39,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const { setNodeRef, isOver } = useDroppable({
@@ -51,12 +52,18 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
     setTitle("");
   };
 
+  const listBackgroundMap: Record<string, string> = {
+    TODO: theme.colors.listTodo,
+    IN_PROGRESS: theme.colors.listInProgress,
+    DONE: theme.colors.listDone,
+  };
+
   return (
     <Card
       ref={setNodeRef}
       style={{
         minWidth: 280,
-        background: isOver ? "rgba(0, 120, 255, 0.08)" : undefined,
+        background: listBackgroundMap[list.name] ?? theme.colors.surface,
       }}
     >
       <h3>{list.name}</h3>
@@ -91,7 +98,12 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} removeTask={removeTask} updateTask={updateTask} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            removeTask={removeTask}
+            updateTask={updateTask}
+          />
         ))}
       </div>
     </Card>
