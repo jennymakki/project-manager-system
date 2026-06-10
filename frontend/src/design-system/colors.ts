@@ -14,6 +14,10 @@ export const colors = {
     success: "#16A34A",
     warning: "#F59E0B",
     danger: "#EF4444",
+
+    listTodo: "#F1F5F9",
+    listInProgress: "#FEF3C7",
+    listDone: "#DCFCE7",
   },
 
   dark: {
@@ -31,6 +35,10 @@ export const colors = {
     success: "#22C55E",
     warning: "#FBBF24",
     danger: "#F87171",
+
+    listTodo: "#1E293B",
+    listInProgress: "#3F2F12",
+    listDone: "#123524",
   },
 
   purple: {
@@ -48,6 +56,10 @@ export const colors = {
     success: "#10B981",
     warning: "#F59E0B",
     danger: "#EF4444",
+
+    listTodo: "#F0FDFA",
+    listInProgress: "#FEF3C7",
+    listDone: "#D1FAE5",
   },
 
   playful: {
@@ -65,5 +77,9 @@ export const colors = {
     success: "#22C55E",
     warning: "#FBBF24",
     danger: "#FB7185",
+
+    listTodo: "#FDF2F8",
+    listInProgress: "#FEF3C7",
+    listDone: "#DCFCE7",
   },
 };
