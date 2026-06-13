@@ -4,6 +4,7 @@ import { useBoards } from "../../../features/boards/state/BoardsContext";
 import { useBreakpoint } from "../../../design-system/hooks/useBreakpoint";
 import ThemeToggle from "../ui/ThemeToggle";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 type SidebarProps = {
   open: boolean;
@@ -68,21 +69,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       </div>
 
       {!isDashboard && (
-        <Link
-          to="/dashboard"
-          onClick={() => isMobile && onClose()}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.sm,
-            textDecoration: "none",
-            color: theme.colors.textSecondary,
-          }}
-        >
-          <ArrowLeft size={18} />
-          <span>Back to Dashboard</span>
+        <Link to="/dashboard" style={{ textDecoration: "none" }}>
+          <Button>
+            <ArrowLeft size={18} />
+            Back to Dashboard
+          </Button>
         </Link>
       )}
 

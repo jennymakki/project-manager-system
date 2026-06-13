@@ -3,13 +3,13 @@ export const colors = {
     primary: "#2563EB",
     primaryHover: "#1D4ED8",
 
-    background: "#F6F7FB",
+    background: "linear-gradient(135deg, #F6F7FB 0%, #E0E7FF 100%)",
     surface: "#FFFFFF",
 
     text: "#0F172A",
     textSecondary: "#64748B",
 
-    border: "#E2E8F0",
+    border: "#C7D2FE",
 
     success: "#16A34A",
     warning: "#F59E0B",
@@ -24,7 +24,7 @@ export const colors = {
     primary: "#60A5FA",
     primaryHover: "#3B82F6",
 
-    background: "#0B1220",
+    background: "linear-gradient(135deg, #0B1220 0%, #1E293B 100%)",
     surface: "#111827",
 
     text: "#E5E7EB",
@@ -45,13 +45,13 @@ export const colors = {
     primary: "#14B8A6",
     primaryHover: "#0D9488",
 
-    background: "#F7FAFA",
+    background: "linear-gradient(135deg, #F7FAFA 0%, #D1FAE5 100%)",
     surface: "#FFFFFF",
 
     text: "#0F172A",
     textSecondary: "#64748B",
 
-    border: "#E2E8E8",
+    border: "#DDD6FE",
 
     success: "#10B981",
     warning: "#F59E0B",
@@ -66,13 +66,13 @@ export const colors = {
     primary: "#F472B6",
     primaryHover: "#EC4899",
 
-    background: "#FFF7FB",
+    background: "linear-gradient(135deg, #FFF7FB 0%, #FCE7F3 50%, #FDF2F8 100%)",
     surface: "#FFFFFF",
 
     text: "#1F2937",
     textSecondary: "#6B7280",
 
-    border: "#FCE7F3",
+    border: "#FBCFE8",
 
     success: "#22C55E",
     warning: "#FBBF24",
