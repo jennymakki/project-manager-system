@@ -107,12 +107,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 padding: theme.spacing.sm,
                 borderRadius: theme.radius.sm,
                 textDecoration: "none",
-                background: isActive(`/boards/${board.id}`)
-                  ? theme.colors.primary
-                  : "transparent",
+
                 color: isActive(`/boards/${board.id}`)
-                  ? "#fff"
+                  ? theme.colors.primary
                   : theme.colors.textSecondary,
+
+                fontWeight: isActive(`/boards/${board.id}`) ? 600 : 400,
               }}
             >
               {board.name}
