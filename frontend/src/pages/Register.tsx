@@ -7,6 +7,8 @@ import { Input } from "../app/components/ui/input";
 import { Card } from "../app/components/ui/card";
 import { useTheme } from "../design-system/theme-provider";
 
+import { Coffee } from "lucide-react";
+
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +54,23 @@ export default function Register() {
           <p style={{ fontSize: 13, opacity: 0.7 }}>
             Start organizing projects and tasks.
           </p>
+        </Card>
+
+        <Card
+          className="animate-fade-up"
+          style={{
+            padding: "10px 14px",
+            background: theme.colors.surface,
+            opacity: 0.8,
+            fontSize: 12,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <Coffee />
+          Heads up: the backend may take up to a minute to wake up on first
+          request
         </Card>
 
         <Card
