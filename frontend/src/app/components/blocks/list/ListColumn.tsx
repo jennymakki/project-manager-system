@@ -66,7 +66,7 @@ export default function ListColumn({ list, tasks, setTasks }: Props) {
         background: listBackgroundMap[list.name] ?? theme.colors.surface,
       }}
     >
-      <h3>{list.name}</h3>
+      <h2>{list.name}</h2>
 
       <div ref={inputRef} style={{ marginTop: 10 }}>
         {isCreating ? (

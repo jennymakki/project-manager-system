@@ -113,19 +113,12 @@ export default function TaskCard({
         </div>
 
         <Button
-          variant="danger"
-          style={{
-            padding: "2px",
-            width: 28,
-            height: 28,
-            borderRadius: 6,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          variant="ghost"
+          aria-label="Delete task"
+          title="Delete task"
           onClick={() => removeTask(task.id)}
         >
-          <Trash2 size={14} />
+          <Trash2 size={14} color={theme.colors.danger} />
         </Button>
       </div>
 
@@ -148,7 +141,9 @@ export default function TaskCard({
             </div>
 
             <Button
-              variant="danger"
+              variant="ghost"
+              aria-label="Delete comment"
+              title="Delete comment"
               style={{
                 padding: "4px 8px",
                 fontSize: 12,
@@ -156,7 +151,7 @@ export default function TaskCard({
               }}
               onClick={() => deleteComment(c.id)}
             >
-              Delete
+              <Trash2 size={14} color={theme.colors.danger} />
             </Button>
           </Card>
         ))}

@@ -3,7 +3,7 @@ import { Spinner } from "./spinner";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
-  variant?: "primary" | "danger";
+  variant?: "primary" | "danger" | "ghost";
 };
 
 export function Button({
@@ -17,9 +17,16 @@ export function Button({
   const { theme } = useTheme();
 
   const backgroundColor =
-  variant === "danger"
-    ? "#dc2626"
-    : theme.colors.primary;
+    variant === "danger"
+      ? "#dc2626"
+      : variant === "ghost"
+        ? "transparent"
+        : theme.colors.primary;
+
+  const color = variant === "ghost" ? theme.colors.text : "#fff";
+
+  const border =
+    variant === "ghost" ? `1px solid ${theme.colors.border}` : "none";
 
   return (
     <button
@@ -30,8 +37,8 @@ export function Button({
         padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
         borderRadius: theme.radius.sm,
         background: loading ? theme.colors.textSecondary : backgroundColor,
-        color: "#fff",
-        border: "none",
+        color,
+        border,
         cursor: loading ? "not-allowed" : "pointer",
         fontSize: theme.typography.fontSize.md,
         fontWeight: 500,

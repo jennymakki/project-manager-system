@@ -126,7 +126,9 @@ export default function BoardPage() {
             )}
 
             <Button
-              variant="danger"
+              variant="ghost"
+              aria-label="Delete board"
+              title="Delete board"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -134,7 +136,7 @@ export default function BoardPage() {
               }}
               onClick={() => removeBoard(Number(board.id))}
             >
-              <Trash2 size={14} />
+              <Trash2 size={18} color={theme.colors.danger} />
             </Button>
           </div>
         </Card>
